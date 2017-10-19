@@ -8,9 +8,8 @@ package com.mycompany.usermannagementserver.cachemanagement;
 import com.mycompany.usermannagementserver.exception.RedisException;
 import com.mycompany.webchatutil.utils.StringUtils;
 import com.mycompany.webchatutil.utils.Validator;
-import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import redis.clients.jedis.Jedis;
 
@@ -53,7 +52,7 @@ public class RedisUtil {
         }
     }
     
-    public static void putToSet(String key, Set<String> value) {
+    public static void putSet(String key, Set<String> value) {
         if (StringUtils.isValid(key)) {
             if (Validator.isValidCollection(value)) {
                 for (String object : value) {
@@ -67,14 +66,36 @@ public class RedisUtil {
         }
     }
     
-    public static void putToList(String key, List<String> value) {
+    public static void putToSet(String key, String... values) {
+        jedis.sadd(key, values);
+    }
+    
+    public static void putList(String key, List<String> value) {
         if (StringUtils.isValid(key)) {
             if (Validator.isValidCollection(value)) {
                 for (String object : value) {
-                     jedis.lpush(key, object);
+                    jedis.lpush(key, object);
                 }
             } else {
                 throw new RedisException("Value is valid! Value was either null or empty.");
+            }
+        } else {
+            throw new RedisException("Key null!");
+        }
+    }
+    
+    static void putToList(String key, String... values) {
+        jedis.lpush(key, values);
+    }
+    
+    public static void putMap(String key, Map<String, String> values) {
+        if (StringUtils.isValid(key)) {
+            if (Validator.isValidMap(values)) {
+                for (Map.Entry<String, String> entry : values.entrySet()) {
+                    String keyMap = entry.getKey();
+                    String value = entry.getValue();
+                    jedis.hset(key, keyMap, value);
+                }
             }
         } else {
             throw new RedisException("Key null!");

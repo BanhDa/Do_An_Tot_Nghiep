@@ -12,6 +12,7 @@ package com.mycompany.usermannagementserver.token;
 public class TokenElement {
     
     private String userId;
+    private Long aliveTime;
 
     public TokenElement() {
     }
@@ -26,6 +27,14 @@ public class TokenElement {
 
     public void setUserId(String userId) {
         this.userId = userId;
+    }
+
+    public Long getAliveTime() {
+        return aliveTime;
+    }
+
+    public void setAliveTime(Long aliveTime) {
+        this.aliveTime = aliveTime;
     }
     
 }

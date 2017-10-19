@@ -14,6 +14,8 @@ import com.mycompany.usermannagementserver.token.JWTUtil;
 import com.mycompany.usermannagementserver.token.TokenElement;
 import com.mycompany.webchatutil.constant.ResponseCode;
 import com.mycompany.usermannagementserver.exception.UserManagememtException;
+import com.mycompany.usermannagementserver.server.service.base.RedisService;
+import com.mycompany.usermannagementserver.server.service.base.TokenService;
 import com.mycompany.webchatutil.utils.Validator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -33,7 +35,11 @@ import org.springframework.web.bind.annotation.RestController;
 public class UserController {
     
     @Autowired
-    UserService userService;
+    private UserService userService;
+    @Autowired
+    private TokenService tokenService;
+    @Autowired
+    private RedisService redisService;
     
     @RequestMapping("/login")
     public ResponseEntity<Response> login(@RequestBody RegisterRequest request) {
@@ -67,9 +73,10 @@ public class UserController {
                 createdUser.setBirthday(request.getBirthday());
                 createdUser.setEmail(request.getEmail());
                 User user = userService.createUser(createdUser);
-        //        TokenElement tokenElement = new TokenElement(user.getUserId());
-        //        String token = JWTUtil.generateToken(tokenElement);
-
+                
+                String token = tokenService.createToken(user.getUserId());
+                redisService.addToken(user.getUserId(), token);
+                
                 response = new Response(ResponseCode.SUCCESSFUL, user);
             }
         } catch (UserManagememtException ex) {
