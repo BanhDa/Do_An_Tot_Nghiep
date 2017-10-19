@@ -39,6 +39,7 @@ public class UserController {
     public ResponseEntity<Response> login(@RequestBody RegisterRequest request) {
         Response response = new Response();
         try {
+            System.out.println("login");
             if (!request.validData()) {
                 response.setCode(ResponseCode.WRONG_DATA_FORMAT);
             } else {
