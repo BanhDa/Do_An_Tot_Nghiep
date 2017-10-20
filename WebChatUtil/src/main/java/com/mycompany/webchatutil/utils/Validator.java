@@ -6,8 +6,7 @@
 package com.mycompany.webchatutil.utils;
 
 import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.Map;
 
 /**
  *
@@ -40,5 +39,18 @@ public class Validator {
         }
         return true;
     }
-
+    
+    public static boolean isValidMap(Map<String, String> map) {
+        return validateObject(map) && !map.isEmpty();
+    }
+    
+    public static boolean isValidMaps(Map<String, String>... maps) {
+        for (Map<String, String> map : maps) {
+            if (!isValidMap(map)) {
+                return false;
+            }
+        }
+        return true;
+    }
+    
 }
