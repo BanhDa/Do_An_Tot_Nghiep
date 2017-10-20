@@ -6,13 +6,17 @@
 package com.mycompany.usermanagementserver.config;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 /**
  *
  * @author tuantran
  */
 @Configuration
+@ComponentScan("com.mycompany.usermanagementserver")
+@EnableWebMvc
 public class Config {
     
     @Value("${session.timeout}")

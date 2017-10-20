@@ -5,21 +5,19 @@
  */
 package com.mycompany.usermanagementserver.server.controller;
 
-import com.mycompany.usermanagementserver.config.Config;
+
 import com.mycompany.usermanagementserver.server.domain.User;
 import com.mycompany.usermanagementserver.server.request.RegisterRequest;
 import com.mycompany.usermanagementserver.server.response.Response;
 import com.mycompany.usermanagementserver.server.service.base.UserService;
-import com.mycompany.usermanagementserver.token.JWTUtil;
-import com.mycompany.usermanagementserver.token.TokenElement;
-import com.mycompany.webchatutil.constant.ResponseCode;
-import com.mycompany.usermanagementserver.exception.UserManagememtException;
 import com.mycompany.usermanagementserver.server.service.base.RedisService;
 import com.mycompany.usermanagementserver.server.service.base.TokenService;
-import com.mycompany.webchatutil.utils.Validator;
+import com.mycompany.webchatutil.constant.ResponseCode;
+import com.mycompany.usermanagementserver.exception.UserManagememtException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -29,7 +27,7 @@ import org.springframework.web.bind.annotation.RestController;
  *
  * @author tuantran
  */
-
+@CrossOrigin(origins = "http://localhost:4200/")
 @RestController
 @RequestMapping("/user")
 public class UserController {
@@ -45,6 +43,7 @@ public class UserController {
     public ResponseEntity<Response> login(@RequestBody RegisterRequest request) {
         Response response = new Response();
         try {
+            System.out.println("login");
             if (!request.validData()) {
                 response.setCode(ResponseCode.WRONG_DATA_FORMAT);
             } else {
