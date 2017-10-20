@@ -3,10 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.mycompany.usermannagementserver;
+package com.mycompany.usermanagementserver;
 
-import com.mycompany.usermannagementserver.cachemanagement.RedisUtil;
-import com.mycompany.usermannagementserver.config.Config;
+import com.mycompany.usermanagementserver.cachemanagement.RedisUtil;
+import com.mycompany.usermanagementserver.config.Config;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;

@@ -3,11 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.mycompany.usermannagementserver.server.service.impl;
+package com.mycompany.usermanagementserver.server.service.impl;
 
-import com.mycompany.usermannagementserver.server.service.base.TokenService;
-import com.mycompany.usermannagementserver.token.JWTUtil;
-import com.mycompany.usermannagementserver.token.TokenElement;
+import com.mycompany.usermanagementserver.server.service.base.TokenService;
+import com.mycompany.usermanagementserver.token.JWTUtil;
+import com.mycompany.usermanagementserver.token.TokenElement;
 import org.springframework.stereotype.Service;
 
 /**

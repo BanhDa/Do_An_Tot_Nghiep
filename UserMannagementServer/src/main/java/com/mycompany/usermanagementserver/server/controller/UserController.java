@@ -3,19 +3,19 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.mycompany.usermannagementserver.server.controller;
+package com.mycompany.usermanagementserver.server.controller;
 
-import com.mycompany.usermannagementserver.config.Config;
-import com.mycompany.usermannagementserver.server.domain.User;
-import com.mycompany.usermannagementserver.server.request.RegisterRequest;
-import com.mycompany.usermannagementserver.server.response.Response;
-import com.mycompany.usermannagementserver.server.service.base.UserService;
-import com.mycompany.usermannagementserver.token.JWTUtil;
-import com.mycompany.usermannagementserver.token.TokenElement;
+import com.mycompany.usermanagementserver.config.Config;
+import com.mycompany.usermanagementserver.server.domain.User;
+import com.mycompany.usermanagementserver.server.request.RegisterRequest;
+import com.mycompany.usermanagementserver.server.response.Response;
+import com.mycompany.usermanagementserver.server.service.base.UserService;
+import com.mycompany.usermanagementserver.token.JWTUtil;
+import com.mycompany.usermanagementserver.token.TokenElement;
 import com.mycompany.webchatutil.constant.ResponseCode;
-import com.mycompany.usermannagementserver.exception.UserManagememtException;
-import com.mycompany.usermannagementserver.server.service.base.RedisService;
-import com.mycompany.usermannagementserver.server.service.base.TokenService;
+import com.mycompany.usermanagementserver.exception.UserManagememtException;
+import com.mycompany.usermanagementserver.server.service.base.RedisService;
+import com.mycompany.usermanagementserver.server.service.base.TokenService;
 import com.mycompany.webchatutil.utils.Validator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

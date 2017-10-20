@@ -3,10 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.mycompany.usermannagementserver.server.service.base;
+package com.mycompany.usermanagementserver.server.service.base;
 
-import com.mycompany.usermannagementserver.server.domain.User;
-import com.mycompany.usermannagementserver.exception.UserManagememtException;
+import com.mycompany.usermanagementserver.server.domain.User;
+import com.mycompany.usermanagementserver.exception.UserManagememtException;
 
 /**
  *

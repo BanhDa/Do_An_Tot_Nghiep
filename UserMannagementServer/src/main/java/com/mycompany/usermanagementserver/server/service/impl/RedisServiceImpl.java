@@ -3,10 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.mycompany.usermannagementserver.server.service.impl;
+package com.mycompany.usermanagementserver.server.service.impl;
 
-import com.mycompany.usermannagementserver.cachemanagement.RedisUtil;
-import com.mycompany.usermannagementserver.server.service.base.RedisService;
+import com.mycompany.usermanagementserver.cachemanagement.RedisUtil;
+import com.mycompany.usermanagementserver.server.service.base.RedisService;
 import com.mycompany.webchatutil.constant.Constant;
 import org.springframework.stereotype.Service;
 

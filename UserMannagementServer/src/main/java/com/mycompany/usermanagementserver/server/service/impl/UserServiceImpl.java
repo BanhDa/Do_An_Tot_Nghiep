@@ -3,13 +3,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.mycompany.usermannagementserver.server.service.impl;
+package com.mycompany.usermanagementserver.server.service.impl;
 
-import com.mycompany.usermannagementserver.server.domain.User;
-import com.mycompany.usermannagementserver.server.repository.UserRepository;
-import com.mycompany.usermannagementserver.server.service.base.UserService;
+import com.mycompany.usermanagementserver.server.domain.User;
+import com.mycompany.usermanagementserver.server.repository.UserRepository;
+import com.mycompany.usermanagementserver.server.service.base.UserService;
 import com.mycompany.webchatutil.constant.ResponseCode;
-import com.mycompany.usermannagementserver.exception.UserManagememtException;
+import com.mycompany.usermanagementserver.exception.UserManagememtException;
 import com.mycompany.webchatutil.utils.Validator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

@@ -3,9 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.mycompany.usermannagementserver.cachemanagement;
+package com.mycompany.usermanagementserver.cachemanagement;
 
-import com.mycompany.usermannagementserver.exception.RedisException;
+import com.mycompany.usermanagementserver.exception.RedisException;
 import com.mycompany.webchatutil.utils.StringUtils;
 import com.mycompany.webchatutil.utils.Validator;
 import java.util.List;

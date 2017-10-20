@@ -3,9 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.mycompany.usermannagementserver.token;
+package com.mycompany.usermanagementserver.token;
 
-import com.mycompany.usermannagementserver.exception.TokenException;
+import com.mycompany.usermanagementserver.exception.TokenException;
 import com.mycompany.webchatutil.utils.StringUtils;
 import com.mycompany.webchatutil.utils.Validator;
 import io.jsonwebtoken.Claims;

@@ -3,9 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.mycompany.usermannagementserver.server.repository;
+package com.mycompany.usermanagementserver.server.repository;
 
-import com.mycompany.usermannagementserver.server.domain.User;
+import com.mycompany.usermanagementserver.server.domain.User;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
 /**
