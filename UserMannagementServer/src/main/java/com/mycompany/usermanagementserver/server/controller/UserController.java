@@ -5,7 +5,6 @@
  */
 package com.mycompany.usermanagementserver.server.controller;
 
-
 import com.mycompany.usermanagementserver.server.domain.User;
 import com.mycompany.usermanagementserver.server.request.RegisterRequest;
 import com.mycompany.usermanagementserver.server.response.Response;
@@ -29,16 +28,25 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @CrossOrigin(origins = "http://localhost:4200/")
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/")
 public class UserController {
-    
+
     @Autowired
     private UserService userService;
     @Autowired
     private TokenService tokenService;
     @Autowired
     private RedisService redisService;
-    
+
+    @RequestMapping("/getuser")
+    public ResponseEntity<Object> getUser() {
+        System.out.println("get user");
+        User user = new User();
+        user.setEmail("tuan@nn.nn");
+        user.setPassword("123456");
+        return new ResponseEntity<>(user, HttpStatus.OK);
+    }
+
     @RequestMapping("/login")
     public ResponseEntity<Response> login(@RequestBody RegisterRequest request) {
         Response response = new Response();
@@ -57,7 +65,7 @@ public class UserController {
         }
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
-    
+
     @PostMapping("/register")
     public ResponseEntity<Response> register(@RequestBody RegisterRequest request) {
         Response response = new Response();
@@ -72,10 +80,10 @@ public class UserController {
                 createdUser.setBirthday(request.getBirthday());
                 createdUser.setEmail(request.getEmail());
                 User user = userService.createUser(createdUser);
-                
+
                 String token = tokenService.createToken(user.getUserId());
                 redisService.addToken(user.getUserId(), token);
-                
+
                 response = new Response(ResponseCode.SUCCESSFUL, user);
             }
         } catch (UserManagememtException ex) {
