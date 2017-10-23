@@ -73,4 +73,10 @@ public class RegisterRequest extends Request{
     public boolean validData() {
         return StringUtils.isValid(email, password);
     }
+
+    @Override
+    public String toString() {
+        return "RegisterRequest{" + "userName=" + userName + ", email=" + email + ", password=" + password + ", gender=" + gender + ", birthday=" + birthday + ", description=" + description + '}';
+    }
+    
 }

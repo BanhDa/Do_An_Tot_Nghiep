@@ -20,9 +20,14 @@ public class RedisServiceImpl implements RedisService{
     @Override
     public boolean addToken(String userId, String token) {
         
+        System.out.println("add token");
         String key = Constant.STORED_TOKEN_KEY + userId;
-        RedisUtil.put(key, token);
+        try {
+            RedisUtil.put(key, token);
+        } catch (Exception ex) {
+            return false;
+        }
         
-        return false;
+        return true;
     }
 }

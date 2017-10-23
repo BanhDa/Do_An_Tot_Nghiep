@@ -42,9 +42,12 @@ public class UserServiceImpl implements UserService{
     @Override
     public User createUser(User user) throws UserManagememtException{
         User searchedUser = userRepository.findByEmail(user.getEmail());
+        System.out.println("seach email : " + user.getEmail());
+        System.out.println("rsu: " + searchedUser);
         if (Validator.validateObject(searchedUser)) {
             throw new UserManagememtException(ResponseCode.EXISTED_EMAIL, "The email was registered!");
         }
+        System.out.println("save user");
         userRepository.save(user);
         return user;
     }

@@ -28,7 +28,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @CrossOrigin(origins = "http://localhost:4200/")
 @RestController
-@RequestMapping("/")
+@RequestMapping("/user")
 public class UserController {
 
     @Autowired
@@ -52,13 +52,15 @@ public class UserController {
         Response response = new Response();
         try {
             System.out.println("login");
-            if (!request.validData()) {
-                response.setCode(ResponseCode.WRONG_DATA_FORMAT);
-            } else {
-                User user = userService.login(request.getEmail(), request.getPassword());
-                response.setCode(ResponseCode.SUCCESSFUL);
-                response.setData(user);
-            }
+            System.out.println("request: " + request);
+            response.setData(request);
+//            if (!request.validData()) {
+//                response.setCode(ResponseCode.WRONG_DATA_FORMAT);
+//            } else {
+//                User user = userService.login(request.getEmail(), request.getPassword());
+//                response.setCode(ResponseCode.SUCCESSFUL);
+//                response.setData(user);
+//            }
         } catch (UserManagememtException ex) {
             response.setCode(ex.getCode());
             response.setData(ex.getMessage());
@@ -70,6 +72,7 @@ public class UserController {
     public ResponseEntity<Response> register(@RequestBody RegisterRequest request) {
         Response response = new Response();
         try {
+            System.out.println("register:");
             if (!request.validData()) {
                 response.setCode(ResponseCode.WRONG_DATA_FORMAT);
             } else {
@@ -82,8 +85,9 @@ public class UserController {
                 User user = userService.createUser(createdUser);
 
                 String token = tokenService.createToken(user.getUserId());
+                System.out.println("token: " + token);
                 redisService.addToken(user.getUserId(), token);
-
+                
                 response = new Response(ResponseCode.SUCCESSFUL, user);
             }
         } catch (UserManagememtException ex) {

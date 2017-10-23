@@ -37,7 +37,9 @@ public class RedisUtil {
     }
     
     public static void put(String key, String value) throws RedisException{
+        System.out.println("put key: " + key + " value: " + value);
         if (StringUtils.isValid(key)) {
+            System.out.println("put");
             jedis.set(key, value);
         } else {
             throw new RedisException("Key null!");
