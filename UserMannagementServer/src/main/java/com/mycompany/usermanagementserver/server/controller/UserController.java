@@ -9,17 +9,20 @@ import com.mycompany.usermanagementserver.server.domain.User;
 import com.mycompany.usermanagementserver.server.request.RegisterRequest;
 import com.mycompany.usermanagementserver.server.response.Response;
 import com.mycompany.usermanagementserver.server.service.base.UserService;
-import com.mycompany.usermanagementserver.server.service.base.RedisService;
 import com.mycompany.usermanagementserver.server.service.base.TokenService;
 import com.mycompany.webchatutil.constant.ResponseCode;
 import com.mycompany.usermanagementserver.exception.UserManagememtException;
+import com.mycompany.usermanagementserver.server.service.base.SessionService;
+import com.mycompany.usermanagementserver.session.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -36,7 +39,7 @@ public class UserController {
     @Autowired
     private TokenService tokenService;
     @Autowired
-    private RedisService redisService;
+    private SessionService sessionService;
 
     @RequestMapping("/getuser")
     public ResponseEntity<Object> getUser() {
@@ -85,8 +88,7 @@ public class UserController {
                 User user = userService.createUser(createdUser);
 
                 String token = tokenService.createToken(user.getUserId());
-                System.out.println("token: " + token);
-                redisService.addToken(user.getUserId(), token);
+                sessionService.addSession(new Session(token));
                 
                 response = new Response(ResponseCode.SUCCESSFUL, user);
             }
@@ -94,6 +96,28 @@ public class UserController {
             response.setCode(ex.getCode());
             response.setData(ex.getMessage());
         }
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+    
+    @PostMapping("/")
+    public ResponseEntity<Response> getUserInfo(@RequestParam("userid") String userId,
+                @RequestHeader("Authorization") String token) {
+        Response response = new Response();
+        
+        try {
+            Session session = sessionService.getSession(token);
+            if (!sessionService.checkSession(session)) {
+                throw new UserManagememtException(ResponseCode.INVALID_TOKEN, "INVALID_TOKEN");
+            }
+            sessionService.resetTimeAlive(token);
+            
+            
+            
+        } catch (UserManagememtException ex) {
+            response.setCode(ex.getCode());
+            response.setData(ex.getMessage());
+        }
+        
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }

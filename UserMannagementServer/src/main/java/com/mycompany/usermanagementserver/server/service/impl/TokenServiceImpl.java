@@ -21,7 +21,6 @@ public class TokenServiceImpl implements TokenService{
     public String createToken(String userId) {
         TokenElement tokenElement = new TokenElement(userId);
         String token = JWTUtil.generateToken(tokenElement);
-        
         return token;
     }
     

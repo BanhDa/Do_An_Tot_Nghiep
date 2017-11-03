@@ -21,4 +21,7 @@ public class ResponseCode {
     //login
     public static final int EMAIL_NOT_FOUND = 4;
     public static final int INVALID_PASSWORD = 5;
+    
+    //token
+    public static final int INVALID_TOKEN = 6;
 }

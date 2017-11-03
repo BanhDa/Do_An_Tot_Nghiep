@@ -5,6 +5,7 @@
  */
 package com.mycompany.usermanagementserver.config;
 
+import com.mycompany.webchatutil.constant.Constant;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -23,4 +24,6 @@ public class Config {
     public Long timeout;
     @Value("${session.config}")
     public String config;
+    
+    public static Long SESSION_TIMEOUT = 60L;
 }

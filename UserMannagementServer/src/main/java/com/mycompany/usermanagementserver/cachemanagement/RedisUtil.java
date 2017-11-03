@@ -36,10 +36,8 @@ public class RedisUtil {
         System.out.println("jedis ping : " + jedis.ping());
     }
     
-    public static void put(String key, String value) throws RedisException{
-        System.out.println("put key: " + key + " value: " + value);
+    public static void set(String key, String value) throws RedisException{
         if (StringUtils.isValid(key)) {
-            System.out.println("put");
             jedis.set(key, value);
         } else {
             throw new RedisException("Key null!");

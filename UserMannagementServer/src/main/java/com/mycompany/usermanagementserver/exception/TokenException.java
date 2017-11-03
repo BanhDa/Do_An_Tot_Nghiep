@@ -11,6 +11,10 @@ package com.mycompany.usermanagementserver.exception;
  */
 public class TokenException extends UserManagememtException{
     
+    public TokenException(int code, String message) {
+        super(code, message);
+    }
+    
     public TokenException(String message) {
         super(message);
     }
