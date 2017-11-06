@@ -10,6 +10,7 @@ import com.mycompany.usermanagementserver.server.repository.UserRepository;
 import com.mycompany.usermanagementserver.server.service.base.UserService;
 import com.mycompany.webchatutil.constant.ResponseCode;
 import com.mycompany.usermanagementserver.exception.UserManagememtException;
+import com.mycompany.webchatutil.utils.StringUtils;
 import com.mycompany.webchatutil.utils.Validator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -42,14 +43,54 @@ public class UserServiceImpl implements UserService{
     @Override
     public User createUser(User user) throws UserManagememtException{
         User searchedUser = userRepository.findByEmail(user.getEmail());
-        System.out.println("seach email : " + user.getEmail());
-        System.out.println("rsu: " + searchedUser);
         if (Validator.validateObject(searchedUser)) {
             throw new UserManagememtException(ResponseCode.EXISTED_EMAIL, "The email was registered!");
         }
-        System.out.println("save user");
         userRepository.save(user);
         return user;
+    }
+    
+    @Override
+    public User getUserInfo(String userId) {
+        User user = userRepository.findByUserId(userId);
+        if (user == null) {
+            throw new UserManagememtException(ResponseCode.NOT_EXIST_USER, "NOT_EXIST_USER");
+        }
+        user.setPassword(null);
+        return user;
+    }
+    
+    @Override
+    public User updateUserInfo(User user) throws UserManagememtException{
+        User searchUser = userRepository.findByEmail(user.getEmail());
+        if (searchUser == null) {
+            throw new UserManagememtException(ResponseCode.EMAIL_NOT_FOUND, "EMAIL_NOT_FOUND");
+        }
+        searchUser = createUpdateUser(user, searchUser);
+        userRepository.save(searchUser);
+        return searchUser;
+    }
+    
+    private User createUpdateUser(User updateUser, User searchUser) {
+        if ( StringUtils.isValid( updateUser.getAvatar() ) ) {
+            searchUser.setAvatar( updateUser.getAvatar() );
+        }
+        if ( StringUtils.isValid( updateUser.getBirthday() ) ) {
+            searchUser.setBirthday( updateUser.getBirthday() );
+        }
+        if ( StringUtils.isValid( updateUser.getEmail() ) ) {
+            searchUser.setEmail( updateUser.getEmail() );
+        }
+        if (updateUser.getGender() != null) {
+            searchUser.setGender( updateUser.getGender() );
+        }
+        if ( StringUtils.isValid( updateUser.getPassword() ) ) {
+            searchUser.setPassword( updateUser.getPassword() );
+        }
+        if ( StringUtils.isValid( updateUser.getUserName() ) ) {
+            searchUser.setUserName( updateUser.getUserName() );
+        }
+        return searchUser;
     }
     
 }

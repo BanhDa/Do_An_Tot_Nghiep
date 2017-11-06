@@ -12,4 +12,6 @@ package com.mycompany.usermanagementserver.server.service.base;
 public interface TokenService {
     
     public String createToken(String userId);
+    
+    public String getUserId(String token);
 }

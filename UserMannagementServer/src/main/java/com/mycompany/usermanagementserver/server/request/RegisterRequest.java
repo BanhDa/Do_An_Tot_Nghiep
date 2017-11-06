@@ -14,12 +14,13 @@ import com.mycompany.webchatutil.utils.StringUtils;
  */
 public class RegisterRequest extends Request{
     
+    private String userId;
     private String userName;
     private String email;
     private String password;
     private Integer gender;
     private String birthday;
-    private String description;
+    private String avatar;
 
     public String getUserName() {
         return userName;
@@ -61,12 +62,20 @@ public class RegisterRequest extends Request{
         this.birthday = birthday;
     }
 
-    public String getDescription() {
-        return description;
+    public String getUserId() {
+        return userId;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
+    public String getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
     }
     
     @Override
@@ -76,7 +85,7 @@ public class RegisterRequest extends Request{
 
     @Override
     public String toString() {
-        return "RegisterRequest{" + "userName=" + userName + ", email=" + email + ", password=" + password + ", gender=" + gender + ", birthday=" + birthday + ", description=" + description + '}';
+        return "RegisterRequest{" + "userId=" + userId + ", userName=" + userName + ", email=" + email + ", password=" + password + ", gender=" + gender + ", birthday=" + birthday + ", avatar=" + avatar + '}';
     }
-    
+
 }

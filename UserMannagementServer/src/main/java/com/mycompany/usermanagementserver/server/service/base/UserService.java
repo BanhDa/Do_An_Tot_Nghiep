@@ -17,4 +17,8 @@ public interface UserService extends ServiceBase{
     public User login(String email, String password) throws UserManagememtException;
     
     public User createUser(User user) throws UserManagememtException;
+    
+    public User getUserInfo(String userId) throws UserManagememtException;
+    
+    public User updateUserInfo(User user) throws UserManagememtException;
 }

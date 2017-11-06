@@ -24,4 +24,6 @@ public class ResponseCode {
     
     //token
     public static final int INVALID_TOKEN = 6;
+    
+    public static final int NOT_EXIST_USER = 7;
 }

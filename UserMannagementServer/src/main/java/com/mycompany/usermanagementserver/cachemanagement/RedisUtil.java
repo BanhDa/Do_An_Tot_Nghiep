@@ -101,4 +101,8 @@ public class RedisUtil {
             throw new RedisException("Key null!");
         }
     }
+    
+    public static void remove(String key) {
+        jedis.del(key);
+    }
 }

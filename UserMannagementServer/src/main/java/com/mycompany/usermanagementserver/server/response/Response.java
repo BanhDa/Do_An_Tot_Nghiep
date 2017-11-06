@@ -13,6 +13,7 @@ public class Response {
     
     private int code;
     private Object data;
+    private String token;
 
     public Response() {
     }
@@ -40,6 +41,14 @@ public class Response {
 
     public void setData(Object data) {
         this.data = data;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
     }
     
 }

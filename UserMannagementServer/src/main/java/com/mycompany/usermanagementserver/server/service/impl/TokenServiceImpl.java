@@ -24,4 +24,9 @@ public class TokenServiceImpl implements TokenService{
         return token;
     }
     
+    @Override
+    public String getUserId(String token) {
+        TokenElement tokenElement = JWTUtil.parse(token);
+        return tokenElement.getUserId();
+    }
 }

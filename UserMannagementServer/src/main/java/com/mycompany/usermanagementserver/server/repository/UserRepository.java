@@ -6,14 +6,16 @@
 package com.mycompany.usermanagementserver.server.repository;
 
 import com.mycompany.usermanagementserver.server.domain.User;
-import org.springframework.data.mongodb.repository.MongoRepository;
 
 /**
  *
  * @author tuantran
  */
-
-public interface UserRepository extends MongoRepository<User, String>{
+public interface UserRepository{
     
     public User findByEmail(String email);
+    
+    public void save(User user);
+    
+    public User findByUserId(String userId);
 }

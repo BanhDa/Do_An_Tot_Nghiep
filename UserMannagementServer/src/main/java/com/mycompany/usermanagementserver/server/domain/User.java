@@ -5,6 +5,9 @@
  */
 package com.mycompany.usermanagementserver.server.domain;
 
+import com.mycompany.usermanagementserver.server.request.RegisterRequest;
+import com.mycompany.webchatutil.constant.UserDBKey;
+import com.mycompany.webchatutil.utils.StringUtils;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
@@ -16,31 +19,47 @@ import org.springframework.data.mongodb.core.mapping.Field;
 @Document(collection = "user")
 public class User {
     
-    public static final String USER_NAME = "user_name";
-    public static final String EMAIL = "email";
-    public static final String PASSWORD = "password";
-    public static final String BIRTHDAY = "birthday";
-    public static final String GENDER = "gender";
-    public static final String DESCRIPTION = "description";
-    public static final String AVATAR = "avatar";
-    
     @Id
     private String userId;
-    @Field(USER_NAME)
+    @Field(UserDBKey.USER.USER_NAME)
     private String userName;
-    @Field(EMAIL)
+    @Field(UserDBKey.USER.EMAIL)
     private String email;
-    @Field(PASSWORD)
+    @Field(UserDBKey.USER.PASSWORD)
     private String password;
-    @Field(BIRTHDAY)
+    @Field(UserDBKey.USER.BIRTHDAY)
     private String birthday;
-    @Field(GENDER)
+    @Field(UserDBKey.USER.GENDER)
     private Integer gender;
-    @Field(DESCRIPTION)
-    private String description;
-    @Field(AVATAR)
+    @Field(UserDBKey.USER.AVATAR)
     private String avatar;
 
+    public User() {}
+    
+    public User(RegisterRequest request) {
+        if ( StringUtils.isValid(request.getUserId() )) {
+            userId = request.getUserId();
+        }
+        if ( StringUtils.isValid(request.getUserName() )) {
+            userName = request.getUserName();
+        }
+        if ( StringUtils.isValid(request.getEmail() )) {
+            email = request.getEmail();
+        }
+        if ( StringUtils.isValid(request.getPassword() )) {
+            password = request.getPassword();
+        }
+        if ( StringUtils.isValid(request.getAvatar() )) {
+            avatar = request.getAvatar();
+        }
+        if ( StringUtils.isValid(request.getBirthday() )) {
+            birthday = request.getBirthday();
+        }
+        if (request.getGender() != null) {
+            gender = request.getGender();
+        }
+    }
+    
     public String getUserId() {
         return userId;
     }
@@ -89,14 +108,6 @@ public class User {
         this.gender = gender;
     }
 
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
     public String getAvatar() {
         return avatar;
     }
@@ -107,6 +118,6 @@ public class User {
 
     @Override
     public String toString() {
-        return "User{" + "userId=" + userId + ", userName=" + userName + ", email=" + email + ", password=" + password + ", birthday=" + birthday + ", gender=" + gender + ", description=" + description + ", avatar=" + avatar + '}';
+        return "User{" + "userId=" + userId + ", userName=" + userName + ", email=" + email + ", password=" + password + ", birthday=" + birthday + ", gender=" + gender + ", avatar=" + avatar + '}';
     }
 }

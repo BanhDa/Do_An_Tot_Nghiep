@@ -12,6 +12,7 @@ import com.mycompany.usermanagementserver.server.service.base.UserService;
 import com.mycompany.usermanagementserver.server.service.base.TokenService;
 import com.mycompany.webchatutil.constant.ResponseCode;
 import com.mycompany.usermanagementserver.exception.UserManagememtException;
+import com.mycompany.usermanagementserver.server.request.Request;
 import com.mycompany.usermanagementserver.server.service.base.SessionService;
 import com.mycompany.usermanagementserver.session.Session;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,19 +55,25 @@ public class UserController {
     public ResponseEntity<Response> login(@RequestBody RegisterRequest request) {
         Response response = new Response();
         try {
-            System.out.println("login");
-            System.out.println("request: " + request);
-            response.setData(request);
-//            if (!request.validData()) {
-//                response.setCode(ResponseCode.WRONG_DATA_FORMAT);
-//            } else {
-//                User user = userService.login(request.getEmail(), request.getPassword());
-//                response.setCode(ResponseCode.SUCCESSFUL);
-//                response.setData(user);
-//            }
+            if (!request.validData()) {
+                response.setCode(ResponseCode.WRONG_DATA_FORMAT);
+            } else {
+                User user = userService.login(request.getEmail(), request.getPassword());
+                
+                String token = tokenService.createToken(user.getUserId());
+                sessionService.addSession(new Session(token));
+                
+                response.setCode(ResponseCode.SUCCESSFUL);
+                response.setData(user);
+                response.setToken(token);
+            }
         } catch (UserManagememtException ex) {
             response.setCode(ex.getCode());
             response.setData(ex.getMessage());
+        } catch (Exception ex) {
+            response.setCode(ResponseCode.UNKNOW_ERROR);
+            response.setData("UNKNOW_ERROR");
+            ex.printStackTrace();
         }
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
@@ -75,7 +82,6 @@ public class UserController {
     public ResponseEntity<Response> register(@RequestBody RegisterRequest request) {
         Response response = new Response();
         try {
-            System.out.println("register:");
             if (!request.validData()) {
                 response.setCode(ResponseCode.WRONG_DATA_FORMAT);
             } else {
@@ -91,17 +97,48 @@ public class UserController {
                 sessionService.addSession(new Session(token));
                 
                 response = new Response(ResponseCode.SUCCESSFUL, user);
+                response.setToken(token);
             }
         } catch (UserManagememtException ex) {
             response.setCode(ex.getCode());
             response.setData(ex.getMessage());
+        } catch (Exception ex) {
+            response.setCode(ResponseCode.UNKNOW_ERROR);
+            response.setData("UNKNOW_ERROR");
+            ex.printStackTrace();
         }
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
     
-    @PostMapping("/")
-    public ResponseEntity<Response> getUserInfo(@RequestParam("userid") String userId,
-                @RequestHeader("Authorization") String token) {
+    @PostMapping("/profile")
+    public ResponseEntity<Response> getUserInfo(@RequestParam("userid") String friendId,
+                @RequestHeader(Request.AUTHORIZATION) String token) {
+        Response response = new Response();
+        
+        try {
+            Session session = sessionService.getSession(token);
+            if (!sessionService.checkSession(session)) {
+                throw new UserManagememtException(ResponseCode.INVALID_TOKEN, "INVALID_TOKEN");
+            }
+            sessionService.resetTimeAlive(token);
+            User userInfo = userService.getUserInfo(friendId);
+            
+            response.setCode(ResponseCode.SUCCESSFUL);
+            response.setData(userInfo);
+        } catch (UserManagememtException ex) {
+            response.setCode(ex.getCode());
+            response.setData(ex.getMessage());
+        } catch (Exception ex) {
+            response.setCode(ResponseCode.UNKNOW_ERROR);
+            response.setData("UNKNOW_ERROR");
+            ex.printStackTrace();
+        }
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+    
+    @PostMapping("/editprofile")
+    public ResponseEntity<Response> editProfile(@RequestHeader(Request.AUTHORIZATION) String token,
+                    @RequestBody RegisterRequest request) {
         Response response = new Response();
         
         try {
@@ -111,13 +148,21 @@ public class UserController {
             }
             sessionService.resetTimeAlive(token);
             
+            User updateUser = new User(request);
+            updateUser = userService.updateUserInfo(updateUser);
             
-            
+            response.setCode(ResponseCode.SUCCESSFUL);
+            response.setData(updateUser);
         } catch (UserManagememtException ex) {
             response.setCode(ex.getCode());
             response.setData(ex.getMessage());
+        } catch (Exception ex) {
+            response.setCode(ResponseCode.UNKNOW_ERROR);
+            response.setData("UNKNOW_ERROR");
+            ex.printStackTrace();
         }
         
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
+    
 }

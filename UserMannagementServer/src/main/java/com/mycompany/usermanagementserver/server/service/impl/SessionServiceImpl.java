@@ -13,11 +13,13 @@ import com.mycompany.usermanagementserver.server.service.base.SessionService;
 import com.mycompany.usermanagementserver.session.Session;
 import com.mycompany.webchatutil.constant.Constant;
 import com.mycompany.webchatutil.constant.ResponseCode;
+import org.springframework.stereotype.Service;
 
 /**
  *
  * @author tuantran
  */
+@Service
 public class SessionServiceImpl implements SessionService{
     
     private static final Long SESSION_TIMEOUT = Config.SESSION_TIMEOUT * Constant.A_MINUTE;
@@ -30,6 +32,8 @@ public class SessionServiceImpl implements SessionService{
             System.out.println("add session fail!");
             System.out.println("session : " + session);
             e.printStackTrace();
+        } catch (Exception ex) {
+            ex.printStackTrace();
         }
     }
     
@@ -40,6 +44,8 @@ public class SessionServiceImpl implements SessionService{
             RedisUtil.set(token, currentTime.toString());
         } catch (RedisException e) {
             e.printStackTrace();
+        } catch (Exception ex) {
+            ex.printStackTrace();
         }
     }
     
@@ -66,6 +72,11 @@ public class SessionServiceImpl implements SessionService{
         }
         long duration = System.currentTimeMillis() - session.getTimeAlive();
         if (duration > SESSION_TIMEOUT) {
+            try {
+                RedisUtil.remove(session.getToken());
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
             throw new TokenException(ResponseCode.INVALID_TOKEN, "INVALID_TOKEN");
         } else {
             result = true;
