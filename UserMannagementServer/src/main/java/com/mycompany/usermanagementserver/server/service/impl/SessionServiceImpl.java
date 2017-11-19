@@ -53,7 +53,7 @@ public class SessionServiceImpl implements SessionService{
     public Session getSession(String token) throws TokenException{
         try {
             String timeAlive = RedisUtil.get(token);
-            if (timeAlive != null) {
+            if (timeAlive == null) {
                 throw new TokenException(ResponseCode.INVALID_TOKEN, "INVALID_TOKEN");
             } else {
                 return new Session(token, new Long(timeAlive));
@@ -82,5 +82,24 @@ public class SessionServiceImpl implements SessionService{
             result = true;
         }
         return result;
+    }
+
+    @Override
+    public void remove(String token){
+        try {
+            RedisUtil.remove(token);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    @Override
+    public boolean checkToken(String token) {
+        Session session = getSession(token);
+        if (!checkSession(session)) {
+            return false;
+        }
+        resetTimeAlive(token);
+        return true;
     }
 }

@@ -7,6 +7,7 @@ package com.mycompany.usermanagementserver.server.service.base;
 
 import com.mycompany.usermanagementserver.server.domain.User;
 import com.mycompany.usermanagementserver.exception.UserManagememtException;
+import java.util.List;
 
 /**
  *
@@ -21,4 +22,6 @@ public interface UserService extends ServiceBase{
     public User getUserInfo(String userId) throws UserManagememtException;
     
     public User updateUserInfo(User user) throws UserManagememtException;
+    
+    public List<User> searchUser(String userId, String searchUserName, Integer skip, Integer take);
 }

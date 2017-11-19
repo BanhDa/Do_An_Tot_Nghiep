@@ -6,6 +6,7 @@
 package com.mycompany.usermanagementserver.server.service.base;
 
 import com.mycompany.usermanagementserver.exception.TokenException;
+import com.mycompany.usermanagementserver.exception.UserManagememtException;
 import com.mycompany.usermanagementserver.session.Session;
 
 /**
@@ -14,6 +15,8 @@ import com.mycompany.usermanagementserver.session.Session;
  */
 public interface SessionService {
     
+    public boolean checkToken(String token);
+    
     public void addSession(Session session);
     
     public void resetTimeAlive(String token);
@@ -21,4 +24,6 @@ public interface SessionService {
     public Session getSession(String token)  throws TokenException;
     
     public boolean checkSession(Session session);
+    
+    public void remove(String token) throws TokenException;
 }

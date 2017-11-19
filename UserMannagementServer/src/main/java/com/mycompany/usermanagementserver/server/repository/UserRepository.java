@@ -6,6 +6,7 @@
 package com.mycompany.usermanagementserver.server.repository;
 
 import com.mycompany.usermanagementserver.server.domain.User;
+import java.util.List;
 
 /**
  *
@@ -18,4 +19,6 @@ public interface UserRepository{
     public void save(User user);
     
     public User findByUserId(String userId);
+    
+    public List<User> searchByName(String userId, String searhUserName);
 }

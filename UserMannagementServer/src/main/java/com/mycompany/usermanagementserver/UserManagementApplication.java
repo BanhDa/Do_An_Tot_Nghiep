@@ -6,7 +6,6 @@
 package com.mycompany.usermanagementserver;
 
 import com.mycompany.usermanagementserver.config.Config;
-import com.mycompany.usermanagementserver.server.domain.User;
 import com.mycompany.usermanagementserver.server.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;

@@ -19,7 +19,7 @@ import org.springframework.stereotype.Component;
  *
  * @author TuanTV
  */
-@Component
+
 public class SimpleCORSFilter implements Filter{
     
     @Override

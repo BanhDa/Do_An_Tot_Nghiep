@@ -13,8 +13,11 @@ import com.mycompany.usermanagementserver.server.service.base.TokenService;
 import com.mycompany.webchatutil.constant.ResponseCode;
 import com.mycompany.usermanagementserver.exception.UserManagememtException;
 import com.mycompany.usermanagementserver.server.request.Request;
+import com.mycompany.usermanagementserver.server.request.SearchRequest;
 import com.mycompany.usermanagementserver.server.service.base.SessionService;
 import com.mycompany.usermanagementserver.session.Session;
+import com.mycompany.webchatutil.utils.StringUtils;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -153,6 +156,50 @@ public class UserController {
             
             response.setCode(ResponseCode.SUCCESSFUL);
             response.setData(updateUser);
+        } catch (UserManagememtException ex) {
+            response.setCode(ex.getCode());
+            response.setData(ex.getMessage());
+        } catch (Exception ex) {
+            response.setCode(ResponseCode.UNKNOW_ERROR);
+            response.setData("UNKNOW_ERROR");
+            ex.printStackTrace();
+        }
+        
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+    
+    @PostMapping("/searchuser")
+    public ResponseEntity<Response> searchUser(@RequestHeader(Request.AUTHORIZATION) String token, 
+            @RequestBody SearchRequest requestData) {
+        Response response = new Response();
+        
+        try {
+            if (sessionService.checkToken(token)) {
+                String userId = tokenService.getUserId(token);
+                List<User> data = userService.searchUser(userId, requestData.getSearchUserName(), requestData.getSkip(), requestData.getTake());
+                response.setCode(ResponseCode.SUCCESSFUL);
+                response.setData(data);
+            } else {
+                throw new UserManagememtException(ResponseCode.INVALID_TOKEN, "INVALID_TOKEN");
+            }
+        } catch (UserManagememtException ex) {
+            response.setCode(ex.getCode());
+            response.setData(ex.getMessage());
+        } catch (Exception ex) {
+            response.setCode(ResponseCode.UNKNOW_ERROR);
+            response.setData("UNKNOW_ERROR");
+            ex.printStackTrace();
+        }
+        
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+    
+    @PostMapping("/logout")
+    public ResponseEntity<Response> logout(@RequestHeader(Request.AUTHORIZATION) String token) {
+        Response response = new Response();
+        
+        try {
+            sessionService.remove(token);
         } catch (UserManagememtException ex) {
             response.setCode(ex.getCode());
             response.setData(ex.getMessage());

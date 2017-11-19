@@ -10,8 +10,11 @@ import com.mycompany.usermanagementserver.server.repository.UserRepository;
 import com.mycompany.usermanagementserver.server.service.base.UserService;
 import com.mycompany.webchatutil.constant.ResponseCode;
 import com.mycompany.usermanagementserver.exception.UserManagememtException;
+import com.mycompany.usermanagementserver.server.common.ListUtils;
 import com.mycompany.webchatutil.utils.StringUtils;
 import com.mycompany.webchatutil.utils.Validator;
+import java.util.ArrayList;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -69,6 +72,21 @@ public class UserServiceImpl implements UserService{
         searchUser = createUpdateUser(user, searchUser);
         userRepository.save(searchUser);
         return searchUser;
+    }
+    
+    @Override
+    public List<User> searchUser(String userId, String searchUserName, Integer skip, Integer take) {
+        List<User> results = new ArrayList<>();
+        
+        try {
+            results = userRepository.searchByName(userId, searchUserName);
+            ListUtils<User> listUtils = new ListUtils<>();
+            results = listUtils.sublist(results, skip, take);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        
+        return results;
     }
     
     private User createUpdateUser(User updateUser, User searchUser) {

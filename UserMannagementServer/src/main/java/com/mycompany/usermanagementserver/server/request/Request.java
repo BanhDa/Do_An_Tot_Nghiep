@@ -11,7 +11,7 @@ package com.mycompany.usermanagementserver.server.request;
  */
 public abstract class Request {
     
-    public static final String AUTHORIZATION = "Authorization";
+    public static final String AUTHORIZATION = "authorization";
     
     public abstract boolean validData();
 }
