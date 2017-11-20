@@ -16,11 +16,11 @@ import com.mycompany.usermanagementserver.server.request.Request;
 import com.mycompany.usermanagementserver.server.request.SearchRequest;
 import com.mycompany.usermanagementserver.server.service.base.SessionService;
 import com.mycompany.usermanagementserver.session.Session;
-import com.mycompany.webchatutil.utils.StringUtils;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -55,7 +55,7 @@ public class UserController {
     }
 
     @RequestMapping("/login")
-    public ResponseEntity<Response> login(@RequestBody RegisterRequest request) {
+    public ResponseEntity<Response> login(@RequestBody @Validated RegisterRequest request) {
         Response response = new Response();
         try {
             if (!request.validData()) {

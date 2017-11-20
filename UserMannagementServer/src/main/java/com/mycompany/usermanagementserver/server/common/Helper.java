@@ -5,7 +5,9 @@
  */
 package com.mycompany.usermanagementserver.server.common;
 
-import com.mycompany.usermanagementserver.exception.UserManagememtException;
+import com.mycompany.webchatutil.utils.StringUtils;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  *
@@ -13,7 +15,16 @@ import com.mycompany.usermanagementserver.exception.UserManagememtException;
  */
 public class Helper {
     
-    public static void checkToken(String token) throws UserManagememtException {
+    public static final String REGEX_EMAIL = "^[\\w-\\+]+(\\.[\\w]+)*@[\\w-]+(\\.[\\w]+)*(\\.[a-z]{2,})$";
+    
+    public static boolean isEmail(String email) {
         
+        if (StringUtils.isValid(email)) {
+            Pattern pattern = Pattern.compile(REGEX_EMAIL);
+            Matcher matcher = pattern.matcher(email);
+            return matcher.matches();
+        }
+        
+        return false;
     }
 }

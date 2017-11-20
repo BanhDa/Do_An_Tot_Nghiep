@@ -6,7 +6,7 @@
 package com.mycompany.usermanagementserver.server.repository.impl;
 
 import com.mycompany.usermanagementserver.exception.UserManagememtException;
-import com.mycompany.usermanagementserver.server.common.ListUtils;
+import com.mycompany.usermanagementserver.server.common.Helper;
 import com.mycompany.usermanagementserver.server.domain.User;
 import com.mycompany.usermanagementserver.server.repository.UserRepository;
 import com.mycompany.webchatutil.constant.UserDBKey;
@@ -66,9 +66,7 @@ public class UserRepositoryImpl implements UserRepository{
     public List<User> searchByName(String userId, String searhUserName) {
         List<User> results = new ArrayList<>();
         
-        ObjectId id = new ObjectId(userId);
-        Query query = new Query(Criteria.where(UserDBKey.USER.USER_NAME).is(searhUserName)
-                .andOperator(Criteria.where(UserDBKey.USER.ID).ne(id)));
+        Query query = createQuerySearchUser(userId, searhUserName);
         try {
             results = mongoOperations.find(query, User.class);
         } catch (Exception ex) {
@@ -78,19 +76,30 @@ public class UserRepositoryImpl implements UserRepository{
         return results;
     }
     
-    private String createQuerySearchByUserName(String searchUserName) {
-        String result = searchUserName;
+    private Query createQuerySearchUser(String userId, String searchUserName) {
+        Query query = new Query();
         
-        if (StringUtils.isValid(searchUserName)) {
-            String[] parts = searchUserName.split(" ");
-            result = "^";
-            for (String part : parts) {
-                int size = part.length();
-                result = result + "[" + part + "]{0," + size +"}";
+        if (StringUtils.isValid(userId, searchUserName)) {
+            query.addCriteria(Criteria.where(UserDBKey.USER.ID).ne( new ObjectId(userId)));
+            
+            //search by email
+            if (Helper.isEmail(searchUserName)) {
+                query.addCriteria(Criteria.where(UserDBKey.USER.EMAIL).is(searchUserName));
+            } else {  // seach by name
+                String[] parts = searchUserName.split("\\s+");
+                StringBuilder builder = new StringBuilder();
+                for (int i = 0; i < parts.length; i++) {
+                    builder.append(parts[i]);
+                    if (i < parts.length - 1) {
+                        builder.append("|");
+                    }
+                }
+                
+                query.addCriteria(Criteria.where(UserDBKey.USER.USER_NAME).regex( builder.toString() ));
             }
-            result = result + "$";
+            
         }
         
-        return result;
+        return query;
     }
 }
