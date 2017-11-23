@@ -81,7 +81,7 @@ public class UserRepositoryImpl implements UserRepository{
         if (Validator.isEmail(searhUserName)) {
             query.addCriteria(Criteria.where(UserDBKey.USER.EMAIL).is(searhUserName));
         } else {
-            String regex = createQuerySearchByUserName(searhUserName);
+            String regex = createQuerySearchByUserName(userId, searhUserName);
             query.addCriteria(Criteria.where(UserDBKey.USER.USER_NAME).regex(regex));
         }
         try {
@@ -93,8 +93,8 @@ public class UserRepositoryImpl implements UserRepository{
         return results;
     }
     
-    private String createQuerySearchByUserName(String searchUserName) {
-        String result = searchUserName;
+    private String createQuerySearchByUserName(String userId, String searchUserName) {
+        String result = null;
         
         if (StringUtils.isValid(searchUserName)) {
             for (String str : Constant.SPECIAL_CHARACTER) {
@@ -114,7 +114,6 @@ public class UserRepositoryImpl implements UserRepository{
                 result = sb.toString();
             }
         }
-        
         return result;
     }
 }

@@ -6,6 +6,7 @@
 package com.mycompany.usermanagementserver.server.request;
 
 import com.mycompany.webchatutil.utils.StringUtils;
+import org.hibernate.validator.constraints.Email;
 
 
 /**
@@ -16,6 +17,7 @@ public class RegisterRequest extends Request{
     
     private String userId;
     private String userName;
+    @Email
     private String email;
     private String password;
     private Integer gender;
