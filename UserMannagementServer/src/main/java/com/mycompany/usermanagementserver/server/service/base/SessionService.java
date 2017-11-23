@@ -6,7 +6,6 @@
 package com.mycompany.usermanagementserver.server.service.base;
 
 import com.mycompany.usermanagementserver.exception.TokenException;
-import com.mycompany.usermanagementserver.exception.UserManagememtException;
 import com.mycompany.usermanagementserver.session.Session;
 
 /**

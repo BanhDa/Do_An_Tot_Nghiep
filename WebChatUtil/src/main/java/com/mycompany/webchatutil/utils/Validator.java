@@ -7,6 +7,8 @@ package com.mycompany.webchatutil.utils;
 
 import java.util.Collection;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  *
@@ -53,4 +55,15 @@ public class Validator {
         return true;
     }
     
+    
+    public static final String REGEX_EMAIL = "^[_A-Za-z0-9-]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
+    private static final Pattern PATTERN_EMAIL = Pattern.compile(REGEX_EMAIL);
+    
+    public static boolean isEmail(String inputString) {
+        if (StringUtils.isValid(inputString)) {
+            Matcher matcher = PATTERN_EMAIL.matcher(inputString);
+            return matcher.matches();
+        }
+        return false;
+    }
 }

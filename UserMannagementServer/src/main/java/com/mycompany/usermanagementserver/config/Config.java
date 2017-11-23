@@ -6,16 +6,12 @@
 package com.mycompany.usermanagementserver.config;
 
 import com.mongodb.MongoClient;
-import com.mycompany.webchatutil.constant.UserDBKey;
 import java.net.UnknownHostException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.data.mongodb.MongoDbFactory;
-import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.SimpleMongoDbFactory;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
@@ -44,15 +40,15 @@ public class Config {
         return new MongoClient(mongoHost, mongoPort);
     }
     
-    @Bean
-    public MongoDbFactory mongoDBFactory() throws UnknownHostException {
-        return new SimpleMongoDbFactory(mongoClient(), UserDBKey.USER_DB_NAME);
-    }
-    
-    @Bean
-    public MongoTemplate mongoTemplate() throws Exception{
-        return new MongoTemplate(mongoDBFactory());
-    }
+//    @Bean
+//    public MongoDbFactory mongoDBFactory() throws UnknownHostException {
+//        return new SimpleMongoDbFactory(mongoClient(), UserDBKey.USER_DB_NAME);
+//    }
+//    
+//    @Bean
+//    public MongoTemplate mongoTemplate() throws Exception{
+//        return new MongoTemplate(mongoDBFactory());
+//    }
     public static Long SESSION_TIMEOUT = 60L;
     
     

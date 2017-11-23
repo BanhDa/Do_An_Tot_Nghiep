@@ -9,7 +9,7 @@ import com.corundumstudio.socketio.AckRequest;
 import com.corundumstudio.socketio.Configuration; 
 import com.corundumstudio.socketio.SocketIOClient; 
 import com.corundumstudio.socketio.SocketIOServer; 
-import com.mycompany.usermanagementserver.serversocket.entity.Event;
+import com.mycompany.usermanagementserver.entity.Event;
 import io.socket.client.Socket;
 import org.apache.tomcat.util.net.SocketEvent;
 
@@ -26,10 +26,10 @@ public class EventChatLauncher {
         config.setPort(9092); 
  
         final SocketIOServer server = new SocketIOServer(config); 
-        server.addEventListener("connect", Object.class, ((SocketIOClient socketIOClient, Object data, AckRequest ackRequest) -> {
+        server.addEventListener("conn", String.class, ((SocketIOClient socketIOClient, String data, AckRequest ackRequest) -> {
             System.out.println("connect");
         }));
-        server.addEventListener("connected", Object.class, ((SocketIOClient socketIOClient, Object data, AckRequest ackRequest) -> {
+        server.addEventListener("disconn", Object.class, ((SocketIOClient socketIOClient, Object data, AckRequest ackRequest) -> {
             System.out.println("connected");
         }));
         server.addEventListener("connection", Object.class, ((SocketIOClient socketIOClient, Object data, AckRequest ackRequest) -> {

@@ -5,6 +5,9 @@
  */
 package com.mycompany.webchatutil.constant;
 
+import java.util.Arrays;
+import java.util.List;
+
 /**
  *
  * @author tuantran
@@ -20,4 +23,6 @@ public class Constant {
         public static final int MALE = 0;
         public static final int FEMALE = 1;
     }
+    
+    public static final List<String> SPECIAL_CHARACTER = Arrays.asList("\\", "(", ")", "?", "$", ".", "*", "+", "^", "[", "]", "|");
 }

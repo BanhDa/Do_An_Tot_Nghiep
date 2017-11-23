@@ -16,7 +16,6 @@ import com.mycompany.usermanagementserver.server.request.Request;
 import com.mycompany.usermanagementserver.server.request.SearchRequest;
 import com.mycompany.usermanagementserver.server.service.base.SessionService;
 import com.mycompany.usermanagementserver.session.Session;
-import com.mycompany.webchatutil.utils.StringUtils;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -124,6 +123,7 @@ public class UserController {
                 throw new UserManagememtException(ResponseCode.INVALID_TOKEN, "INVALID_TOKEN");
             }
             sessionService.resetTimeAlive(token);
+            
             User userInfo = userService.getUserInfo(friendId);
             
             response.setCode(ResponseCode.SUCCESSFUL);

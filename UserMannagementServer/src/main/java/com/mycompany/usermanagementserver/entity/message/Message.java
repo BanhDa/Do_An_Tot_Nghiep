@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.mycompany.usermanagementserver.serversocket.entity.message;
+package com.mycompany.usermanagementserver.entity.message;
 
 /**
  *
@@ -16,7 +16,7 @@ public class Message {
     private String toUserId;
     private String time;
     private String readTime;
-    private String messageType;
+    private MessageType messageType;
     private String value;
 
     public String getId() {
@@ -59,11 +59,11 @@ public class Message {
         this.readTime = readTime;
     }
 
-    public String getMessageType() {
+    public MessageType getMessageType() {
         return messageType;
     }
 
-    public void setMessageType(String messageType) {
+    public void setMessageType(MessageType messageType) {
         this.messageType = messageType;
     }
 

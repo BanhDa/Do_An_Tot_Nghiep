@@ -6,7 +6,7 @@
 package com.mycompany.usermanagementserver.server.domain;
 
 import com.mycompany.usermanagementserver.server.request.RegisterRequest;
-import com.mycompany.webchatutil.constant.UserDBKey;
+import com.mycompany.webchatutil.constant.mongodbkey.UserDBKey;
 import com.mycompany.webchatutil.utils.StringUtils;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;

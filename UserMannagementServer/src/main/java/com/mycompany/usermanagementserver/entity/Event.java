@@ -3,12 +3,14 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.mycompany.usermanagementserver.serversocket.entity.message;
+package com.mycompany.usermanagementserver.entity;
 
 /**
  *
  * @author tuantran
  */
-public enum MessageType {
+public class Event {
+
+    public static final String CHAT = "chat";
     
 }
