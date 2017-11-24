@@ -21,4 +21,6 @@ public interface UserRepository{
     public User findByUserId(String userId);
     
     public List<User> searchByName(String userId, String searhUserName);
+    
+    public List<User> getUsersInfo(List<String> userIds);
 }

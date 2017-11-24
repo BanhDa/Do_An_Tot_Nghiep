@@ -89,6 +89,17 @@ public class UserServiceImpl implements UserService{
         return results;
     }
     
+    @Override
+    public List<User> getUsersInfo(List<String> userIds) {
+        List<User> results = new ArrayList<>();
+        
+        if (userIds != null && !userIds.isEmpty()) {
+            results = userRepository.getUsersInfo(userIds);
+        }
+        
+        return results;
+    }
+    
     private User createUpdateUser(User updateUser, User searchUser) {
         if ( StringUtils.isValid( updateUser.getAvatar() ) ) {
             searchUser.setAvatar( updateUser.getAvatar() );

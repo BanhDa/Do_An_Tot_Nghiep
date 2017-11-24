@@ -8,13 +8,14 @@ package com.mycompany.usermanagementserver.server.controller;
 import com.mycompany.usermanagementserver.entity.message.Message;
 import com.mycompany.usermanagementserver.exception.UserManagememtException;
 import com.mycompany.usermanagementserver.lastchat.LastChatManagement;
+import com.mycompany.usermanagementserver.server.domain.User;
 import com.mycompany.usermanagementserver.server.request.Request;
 import com.mycompany.usermanagementserver.server.response.Response;
 import com.mycompany.usermanagementserver.server.service.base.ChatService;
 import com.mycompany.usermanagementserver.server.service.base.SessionService;
 import com.mycompany.usermanagementserver.server.service.base.TokenService;
+import com.mycompany.usermanagementserver.server.service.base.UserService;
 import com.mycompany.webchatutil.constant.ResponseCode;
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,6 +39,8 @@ public class ChatController {
     private SessionService sessionService;
     @Autowired
     private ChatService chatService;
+    @Autowired
+    private UserService userService;
     
     @RequestMapping("/conversations")
     public ResponseEntity<Response> listConversations(@RequestHeader(Request.AUTHORIZATION) String token) {
@@ -50,6 +53,9 @@ public class ChatController {
             
             String userId = tokenService.getUserId(token);
             List<Message> lastMessages = chatService.getLastMessages(userId);
+            
+            List<String> friendIds = LastChatManagement.getFriendIds(userId);
+            List<User> usersInfo = userService.getUsersInfo(friendIds);
             
         } catch (UserManagememtException ex) {
             response.setCode(ex.getCode());

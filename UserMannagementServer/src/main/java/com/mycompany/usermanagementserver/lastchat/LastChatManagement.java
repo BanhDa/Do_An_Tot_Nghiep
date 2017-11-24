@@ -42,4 +42,17 @@ public class LastChatManagement {
         
         return results;
     }
+    
+    public static List<String> getFriendIds(String userId) {
+        List<String> results = new ArrayList<>();
+        
+        Map<String, String> lastChats = LAST_CHAT.get(userId);
+        if (lastChats != null && !lastChats.isEmpty()) {
+            lastChats.entrySet().forEach((lastChat) -> {
+                results.add( lastChat.getKey() );
+            });
+        }
+        
+        return results;
+    }
 }

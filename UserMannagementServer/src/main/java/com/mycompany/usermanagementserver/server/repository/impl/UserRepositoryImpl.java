@@ -73,6 +73,23 @@ public class UserRepositoryImpl implements UserRepository{
     }
     
     @Override
+    public List<User> getUsersInfo(List<String> userIds) {
+        List<User> results = new ArrayList<>();
+        if (userIds != null && !userIds.isEmpty()) {
+            List<ObjectId> ids = new ArrayList<>();
+            
+            userIds.stream().map((userId) -> new ObjectId(userId)).forEachOrdered((id) -> {
+                ids.add(id);
+            });
+            
+            Query query = new Query(Criteria.where(UserDBKey.USER.ID).in(ids));
+            results = mongoOperations.find(query, User.class);
+        }
+            
+        return results;
+    }
+    
+    @Override
     public List<User> searchByName(String userId, String searhUserName) {
         List<User> results = new ArrayList<>();
         
@@ -81,7 +98,7 @@ public class UserRepositoryImpl implements UserRepository{
         if (Validator.isEmail(searhUserName)) {
             query.addCriteria(Criteria.where(UserDBKey.USER.EMAIL).is(searhUserName));
         } else {
-            String regex = createQuerySearchByUserName(userId, searhUserName);
+            String regex = createQuerySearchByUserName(searhUserName);
             query.addCriteria(Criteria.where(UserDBKey.USER.USER_NAME).regex(regex));
         }
         try {
@@ -93,7 +110,7 @@ public class UserRepositoryImpl implements UserRepository{
         return results;
     }
     
-    private String createQuerySearchByUserName(String userId, String searchUserName) {
+    private String createQuerySearchByUserName(String searchUserName) {
         String result = null;
         
         if (StringUtils.isValid(searchUserName)) {
@@ -116,4 +133,5 @@ public class UserRepositoryImpl implements UserRepository{
         }
         return result;
     }
+
 }
