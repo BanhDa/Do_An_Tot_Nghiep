@@ -19,4 +19,5 @@ public interface ChatLogRepository {
     
     public List<Message> getMessages(String userId, Collection<String> messageIds);
             
+    public List<Message> getMessages(String userId, String friendId, Integer skip, Integer take);
 }

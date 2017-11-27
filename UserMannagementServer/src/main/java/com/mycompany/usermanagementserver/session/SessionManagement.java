@@ -6,6 +6,8 @@
 package com.mycompany.usermanagementserver.session;
 
 import com.mycompany.usermanagementserver.exception.TokenException;
+import com.mycompany.webchatutil.utils.StringUtils;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -15,6 +17,10 @@ import java.util.concurrent.ConcurrentHashMap;
 public class SessionManagement {
     
     private static ConcurrentHashMap<String, Session> SESSION_CONTAINER = new ConcurrentHashMap<>();
+    
+    public static Map<String, Session> getContainer() {
+        return SESSION_CONTAINER;
+    }
     
     public static void addSession(Session session) {
         if (session != null) {
@@ -26,13 +32,19 @@ public class SessionManagement {
         return SESSION_CONTAINER.get(token);
     }
     
-    public static void resetSession(String token) {
+    public static void resetSession(String token) throws TokenException{
         Session session = SESSION_CONTAINER.get(token);
         if (session == null) {
             throw new TokenException("Not session!");
         }
         session.setTimeAlive(System.currentTimeMillis());
         SESSION_CONTAINER.put(token, session);
+    }
+    
+    public static void remove(String token) {
+        if (StringUtils.isValid(token)) {
+            SESSION_CONTAINER.remove(token);
+        }
     }
     
 }

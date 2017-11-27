@@ -5,14 +5,12 @@
  */
 package com.mycompany.usermanagementserver.server.service.impl;
 
-import com.mycompany.usermanagementserver.cachemanagement.RedisUtil;
 import com.mycompany.usermanagementserver.config.Config;
-import com.mycompany.usermanagementserver.exception.RedisException;
-import com.mycompany.usermanagementserver.exception.TokenException;
 import com.mycompany.usermanagementserver.server.service.base.SessionService;
 import com.mycompany.usermanagementserver.session.Session;
+import com.mycompany.usermanagementserver.session.SessionManagement;
 import com.mycompany.webchatutil.constant.Constant;
-import com.mycompany.webchatutil.constant.ResponseCode;
+import com.mycompany.webchatutil.utils.StringUtils;
 import org.springframework.stereotype.Service;
 
 /**
@@ -26,58 +24,34 @@ public class SessionServiceImpl implements SessionService{
     
     @Override
     public void addSession(Session session) {
-        try {
-            RedisUtil.set(session.getToken(), session.getTimeAlive().toString());
-        } catch (RedisException e) {
-            System.out.println("add session fail!");
-            System.out.println("session : " + session);
-            e.printStackTrace();
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
+        SessionManagement.addSession(session);
     }
     
     @Override
     public void resetTimeAlive(String token) {
-        try {
-            Long currentTime = System.currentTimeMillis();
-            RedisUtil.set(token, currentTime.toString());
-        } catch (RedisException e) {
-            e.printStackTrace();
-        } catch (Exception ex) {
-            ex.printStackTrace();
+        if (StringUtils.isValid(token)) {
+            SessionManagement.resetSession(token);
         }
     }
     
     @Override
-    public Session getSession(String token) throws TokenException{
-        try {
-            String timeAlive = RedisUtil.get(token);
-            if (timeAlive == null) {
-                throw new TokenException(ResponseCode.INVALID_TOKEN, "INVALID_TOKEN");
-            } else {
-                return new Session(token, new Long(timeAlive));
-            }
-        } catch (RedisException | TokenException | NumberFormatException e) {
-            e.printStackTrace();
-            throw new TokenException(ResponseCode.INVALID_TOKEN, "INVALID_TOKEN");
+    public Session getSession(String token) {
+        Session session = null;
+        if (StringUtils.isValid(token)) {
+            session = SessionManagement.getSession(token);
         }
+        
+        return session;
     }
     
-    @Override
-    public boolean checkSession(Session session) throws TokenException{
+    private boolean checkSession(Session session) {
         Boolean result = false;
         if (session == null || session.getToken() == null || session.getTimeAlive() == null) {
-            throw new TokenException(ResponseCode.INVALID_TOKEN, "INVALID_TOKEN");
+            return result;
         }
         long duration = System.currentTimeMillis() - session.getTimeAlive();
         if (duration > SESSION_TIMEOUT) {
-            try {
-                RedisUtil.remove(session.getToken());
-            } catch (Exception ex) {
-                ex.printStackTrace();
-            }
-            throw new TokenException(ResponseCode.INVALID_TOKEN, "INVALID_TOKEN");
+            SessionManagement.remove(session.getToken());
         } else {
             result = true;
         }
@@ -86,10 +60,8 @@ public class SessionServiceImpl implements SessionService{
 
     @Override
     public void remove(String token){
-        try {
-            RedisUtil.remove(token);
-        } catch (Exception ex) {
-            ex.printStackTrace();
+        if (StringUtils.isValid(token)) {
+            SessionManagement.remove(token);
         }
     }
 

@@ -45,15 +45,6 @@ public class UserController {
     @Autowired
     private SessionService sessionService;
 
-    @RequestMapping("/getuser")
-    public ResponseEntity<Object> getUser() {
-        System.out.println("get user");
-        User user = new User();
-        user.setEmail("tuan@nn.nn");
-        user.setPassword("123456");
-        return new ResponseEntity<>(user, HttpStatus.OK);
-    }
-
     @RequestMapping("/login")
     public ResponseEntity<Response> login(@RequestBody @Validated RegisterRequest request) {
         Response response = new Response();
@@ -119,11 +110,9 @@ public class UserController {
         Response response = new Response();
         
         try {
-            Session session = sessionService.getSession(token);
-            if (!sessionService.checkSession(session)) {
+            if (!sessionService.checkToken(token)) {
                 throw new UserManagememtException(ResponseCode.INVALID_TOKEN, "INVALID_TOKEN");
             }
-            sessionService.resetTimeAlive(token);
             
             User userInfo = userService.getUserInfo(friendId);
             
@@ -146,11 +135,9 @@ public class UserController {
         Response response = new Response();
         
         try {
-            Session session = sessionService.getSession(token);
-            if (!sessionService.checkSession(session)) {
+            if (!sessionService.checkToken(token)) {
                 throw new UserManagememtException(ResponseCode.INVALID_TOKEN, "INVALID_TOKEN");
             }
-            sessionService.resetTimeAlive(token);
             
             User updateUser = new User(request);
             updateUser = userService.updateUserInfo(updateUser);

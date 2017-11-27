@@ -5,13 +5,12 @@
  */
 package com.mycompany.usermanagementserver;
 
-import com.mycompany.usermanagementserver.config.Config;
-import com.mycompany.usermanagementserver.server.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.mycompany.usermanagementserver.lastchat.LastChatManagement;
+import com.mycompany.usermanagementserver.session.SessionGabarger;
+import com.mycompany.usermanagementserver.unreadmessage.UnreadMessageManagement;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.data.mongodb.core.MongoOperations;
 
 /**
  *
@@ -21,28 +20,22 @@ import org.springframework.data.mongodb.core.MongoOperations;
 @SpringBootApplication
 public class UserManagementApplication implements CommandLineRunner{
     
-    @Autowired
-    private Config config;
-    
-    @Autowired
-    private MongoOperations mongoOperations;
-    
-    @Autowired 
-    private UserRepository userRepository;
-    
     public static void main(String[] args) {
         SpringApplication.run(UserManagementApplication.class, args);
     }
 
     @Override
     public void run(String... strings) throws Exception {
-//        User user = new User();
-//        user.setUserId("");
-//        user.setEmail("tuan2@nn.nn");
-//        user.setPassword("khongco");
-//        user.setGender(1);
-//        
-//        mongoOperations.save(user);
-//        System.out.println("" + user);
+        cache();
+        gabarge();
+    }
+    
+    private void cache() {
+        LastChatManagement.cache();
+        UnreadMessageManagement.cache();
+    }
+    
+    private void gabarge() {
+        SessionGabarger.start();
     }
 }

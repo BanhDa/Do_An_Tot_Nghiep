@@ -5,15 +5,28 @@
  */
 package com.mycompany.usermanagementserver.server.request;
 
+import com.mycompany.usermanagementserver.exception.UserManagememtException;
+import com.mycompany.webchatutil.constant.ResponseCode;
+import com.mycompany.webchatutil.utils.StringUtils;
+
 /**
  *
  * @author tuantran
  */
 public class SearchRequest extends Request{
-
+    
+    private String friendId;
     private String searchUserName;
     private Integer skip;
     private Integer take;
+
+    public String getFriendId() {
+        return friendId;
+    }
+
+    public void setFriendId(String friendId) {
+        this.friendId = friendId;
+    }
 
     public String getSearchUserName() {
         return searchUserName;
@@ -40,8 +53,12 @@ public class SearchRequest extends Request{
     }
     
     @Override
-    public boolean validData() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public boolean validData() throws UserManagememtException{
+        if (StringUtils.isValid(this.friendId)) {
+            return true;
+        } else {
+            throw new UserManagememtException(ResponseCode.WRONG_DATA_FORMAT, "Friend id null");
+        }
     }
     
 }

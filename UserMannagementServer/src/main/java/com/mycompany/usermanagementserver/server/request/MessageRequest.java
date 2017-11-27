@@ -3,14 +3,15 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.mycompany.usermanagementserver.entity.message;
+package com.mycompany.usermanagementserver.server.request;
 
 /**
  *
  * @author tuantran
  */
-public class Message {
+public class MessageRequest {
     
+    private String token;
     private String id;
     private String fromUserId;
     private String toUserId;
@@ -25,6 +26,14 @@ public class Message {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
     }
 
     public String getFromUserId() {
@@ -74,5 +83,10 @@ public class Message {
     public void setValue(String value) {
         this.value = value;
     }
-    
+
+    @Override
+    public String toString() {
+        return "MessageRequest{" + "token=" + token + ", id=" + id + ", fromUserId=" + fromUserId + ", toUserId=" + toUserId + ", time=" + time + ", readTime=" + readTime + ", messageType=" + messageType + ", value=" + value + '}';
+    }
+
 }

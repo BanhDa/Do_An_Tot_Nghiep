@@ -22,7 +22,5 @@ public interface SessionService {
     
     public Session getSession(String token)  throws TokenException;
     
-    public boolean checkSession(Session session);
-    
     public void remove(String token) throws TokenException;
 }

@@ -9,7 +9,6 @@ import com.mycompany.usermanagementserver.entity.message.Message;
 import com.mycompany.usermanagementserver.lastchat.LastChatManagement;
 import com.mycompany.usermanagementserver.server.repository.ChatLogRepository;
 import com.mycompany.usermanagementserver.server.service.base.ChatService;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,5 +31,14 @@ public class ChatServiceImpl implements ChatService{
         
         return results;
     }
+
+    @Override
+    public List<Message> getChatHistory(String userId, String friendId, Integer skip, Integer take) {
+        return chatLogRepository.getMessages(userId, friendId, skip, take);
+    }
     
+    @Override
+    public List<String> getLastChatUsers(String userId) {
+        return LastChatManagement.getFriendIds(userId);
+    }
 }

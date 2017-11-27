@@ -65,4 +65,14 @@ public class JWTUtil {
         }
     }
     
+    public static String getUserId(String token) {
+        String result = null;
+        
+        if (StringUtils.isValid(token)) {
+            TokenElement tokenElement = parse(token);
+            result = tokenElement.getUserId();
+        }
+        
+        return result;
+    }
 }

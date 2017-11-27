@@ -5,6 +5,7 @@
  */
 package com.mycompany.usermanagementserver.server.repository.impl;
 
+import com.mongodb.BasicDBList;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBCollection;
 import com.mongodb.DBCursor;
@@ -26,9 +27,6 @@ import org.springframework.data.mongodb.MongoDbFactory;
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.SimpleMongoDbFactory;
-import org.springframework.data.mongodb.core.query.BasicQuery;
-import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -97,7 +95,41 @@ public class ChatLogRepositoryImpl implements ChatLogRepository{
         
         return messages;
     }
-    
+
+    @Override
+    public List<Message> getMessages(String userId, String friendId, Integer skip, Integer take) {
+        List<Message> results = new ArrayList<>();
+        
+        DBCollection collection = getCollection(userId);
+        
+        BasicDBList list = new BasicDBList();
+        BasicDBObject friendIsSender = new BasicDBObject(ChatLogDBKey.FROM_USER_ID, friendId);
+        list.add(friendIsSender);
+        BasicDBObject friendIdReceiver = new BasicDBObject(ChatLogDBKey.TO_USER_ID, friendId);
+        list.add(friendIdReceiver);
+        
+        BasicDBObject query = new BasicDBObject("$or", list);
+        BasicDBObject sortBySendTime = new BasicDBObject(ChatLogDBKey.TIME, 1);
+        
+        try {
+            DBCursor cursor = collection.find(query).sort(sortBySendTime);
+            if (skip != null && take != null) {
+                cursor = cursor.skip(skip).limit(take);
+            }
+            
+            while (cursor.hasNext()) {                
+                BasicDBObject obj = (BasicDBObject) cursor.next();
+                Message message = parseToObject(obj);
+                if (message != null) {
+                    results.add(message);
+                }
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        
+        return results;
+    }
     
     private DBCollection getCollection(String userId) {
         return mongoOperations.getCollection(userId);
@@ -110,8 +142,8 @@ public class ChatLogRepositoryImpl implements ChatLogRepository{
             message.setId( obj.getObjectId(ChatLogDBKey.ID).toString() );
             message.setFromUserId( obj.getString(ChatLogDBKey.FROM_USER_ID) );
             message.setToUserId( obj.getString(ChatLogDBKey.TO_USER_ID) );
-            String msgType = obj.getString( ChatLogDBKey.MESSAGE_TYPE);
-            message.setMessageType( MessageType.valueOf(msgType) );
+            message.setValue( obj.getString(ChatLogDBKey.VALUE) );
+            message.setMessageType( obj.getString( ChatLogDBKey.MESSAGE_TYPE) );
             message.setTime( obj.getString(ChatLogDBKey.TIME) );
             message.setReadTime( obj.getString(ChatLogDBKey.READ_TIME) );
         } catch (Exception ex) {
@@ -128,12 +160,13 @@ public class ChatLogRepositoryImpl implements ChatLogRepository{
         if (message != null) {
             MongoHelper.put(result, ChatLogDBKey.FROM_USER_ID, message.getFromUserId());
             MongoHelper.put(result, ChatLogDBKey.TO_USER_ID, message.getToUserId());
-            MongoHelper.put(result, ChatLogDBKey.MESSAGE_TYPE, message.getMessageType().toString());
+            MongoHelper.put(result, ChatLogDBKey.MESSAGE_TYPE, message.getMessageType());
+            MongoHelper.put(result, ChatLogDBKey.VALUE, message.getValue());
             MongoHelper.put(result, ChatLogDBKey.TIME, message.getTime());
             MongoHelper.put(result, ChatLogDBKey.READ_TIME, message.getReadTime());
         }
         
         return result;
     }
-    
+
 }

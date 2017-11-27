@@ -15,4 +15,8 @@ import java.util.List;
 public interface ChatService {
     
     public List<Message> getLastMessages(String userId);
+    
+    public List<String> getLastChatUsers(String userId);
+    
+    public List<Message> getChatHistory(String userId, String friendId, Integer skip, Integer take);
 }

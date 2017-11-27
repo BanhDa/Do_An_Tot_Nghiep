@@ -9,8 +9,9 @@ package com.mycompany.usermanagementserver.entity;
  *
  * @author tuantran
  */
-public class Event {
+public class Socket {
 
-    public static final String CHAT = "chat";
+    public static final String EVENT_CONNECTION = "connection";
+    public static final String EVENT_CHAT = "chat";
     
 }

@@ -5,6 +5,8 @@
  */
 package com.mycompany.usermanagementserver.server.request;
 
+import com.mycompany.usermanagementserver.exception.UserManagememtException;
+
 /**
  *
  * @author tuantran
@@ -13,5 +15,5 @@ public abstract class Request {
     
     public static final String AUTHORIZATION = "authorization";
     
-    public abstract boolean validData();
+    public abstract boolean validData() throws UserManagememtException;
 }
