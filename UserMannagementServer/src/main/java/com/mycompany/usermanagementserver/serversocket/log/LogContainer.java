@@ -25,7 +25,7 @@ public class LogContainer {
                 new LinkedBlockingQueue<>()
                 );
     
-    public static void addTask(LogExecutor task) {
+    public static void addTask(Runnable task) {
         threadPoolExecutor.execute(task);
     }
 }

@@ -11,7 +11,6 @@ import com.mongodb.DBCollection;
 import com.mongodb.DBCursor;
 import com.mongodb.DBObject;
 import com.mycompany.usermanagementserver.dao.DBManagement;
-import com.mycompany.usermanagementserver.entity.message.Message;
 import com.mycompany.webchatutil.constant.mongodbkey.ChatInfoDBKey;
 import com.mycompany.webchatutil.utils.StringUtils;
 import java.util.HashMap;
@@ -34,23 +33,22 @@ public class LastChatDAO {
                 while (cursor.hasNext()) {
                     BasicDBObject obj = (BasicDBObject) cursor.next();
                     String userId = obj.getObjectId(ChatInfoDBKey.LAST_CHAT.ID).toString();
-                    BasicDBList lastChats = (BasicDBList) obj.get(ChatInfoDBKey.LAST_CHAT.LAST_CHAT);
+                    BasicDBList lastChats = (BasicDBList) obj.get(ChatInfoDBKey.LAST_CHAT.LAST_CHATS);
                     
                     HashMap<String, String> mapLastChat = new HashMap<>();
-                    for (Object object : lastChats) {
-                        BasicDBObject lastChat = (BasicDBObject) object;
-                        String fromUserId = lastChat.getString(ChatInfoDBKey.LAST_CHAT.FROM_USERID);
-                        String toUserId = lastChat.getString(ChatInfoDBKey.LAST_CHAT.TO_USERID);
-                        
-                        String friendId = fromUserId.equals(fromUserId) ? toUserId : fromUserId;
-                        String messageId = lastChat.getString(ChatInfoDBKey.LAST_CHAT.MESSAGE_ID);
-                        mapLastChat.put(friendId, messageId);
+                    if (lastChats != null && !lastChats.isEmpty()) {
+                        for (Object object : lastChats) {
+                            BasicDBObject lastChat = (BasicDBObject) object;
+                            String friendId = lastChat.getString(ChatInfoDBKey.LAST_CHAT.FRIEND_ID);
+                            String messageId = lastChat.getString(ChatInfoDBKey.LAST_CHAT.MESSAGE_ID);
+                            mapLastChat.put(friendId, messageId);
+                        }
                     }
-                    
                     results.put(userId, mapLastChat);
                 }
             }
         } catch (Exception e) {
+            e.printStackTrace();
         }
         
         return results;
@@ -65,17 +63,12 @@ public class LastChatDAO {
         try {
             BasicDBObject obj = (BasicDBObject) LAST_CHAT_COLLECTION.findOne(query);
             if (obj != null) {
-                BasicDBList lastChats = (BasicDBList) obj.get(ChatInfoDBKey.LAST_CHAT.LAST_CHAT);
+                BasicDBList lastChats = (BasicDBList) obj.get(ChatInfoDBKey.LAST_CHAT.LAST_CHATS);
                 for (Object object : lastChats) {
                     BasicDBObject lastChat = (BasicDBObject) object;
-                    String fromUserId = lastChat.getString(ChatInfoDBKey.LAST_CHAT.FROM_USERID);
-                    String toUserId = lastChat.getString(ChatInfoDBKey.LAST_CHAT.TO_USERID);
+                    String friendId = lastChat.getString(ChatInfoDBKey.LAST_CHAT.FRIEND_ID);
                     String messageId = lastChat.getString(ChatInfoDBKey.LAST_CHAT.MESSAGE_ID);
-                    if (fromUserId.equals(userId)) {
-                        results.put(toUserId, messageId);
-                    } else {
-                        results.put(fromUserId, messageId);
-                    }
+                    results.put(friendId, messageId);
                 }
             }
         } catch (Exception e) {
@@ -85,32 +78,33 @@ public class LastChatDAO {
         return results;
     }
     
-    public static void insert(String userId, Message message) {
-        
-        if (StringUtils.isValid(userId)) {
-            ObjectId id = new ObjectId(userId);
-            BasicDBObject query = new BasicDBObject(ChatInfoDBKey.LAST_CHAT.ID, id);
-            
-            DBObject findResult = LAST_CHAT_COLLECTION.findOne(query);
-            BasicDBObject lastChat = new BasicDBObject(ChatInfoDBKey.LAST_CHAT.FROM_USERID, message.getFromUserId())
-                    .append(ChatInfoDBKey.LAST_CHAT.TO_USERID, message.getToUserId())
-                    .append(ChatInfoDBKey.LAST_CHAT.MESSAGE_ID, message.getId());
+    public static void update(String userId, String friendId, String messageId) {
+        try {
+            if (StringUtils.isValid(userId, friendId, messageId)) {
+                ObjectId id = new ObjectId(userId);
+                BasicDBObject query = new BasicDBObject(ChatInfoDBKey.LAST_CHAT.ID, id);
+                BasicDBObject friendIdMatch = new BasicDBObject(ChatInfoDBKey.LAST_CHAT.FRIEND_ID, friendId);
+                query.append(ChatInfoDBKey.LAST_CHAT.LAST_CHATS, new BasicDBObject("$elemMatch", friendIdMatch) );
+                DBObject findResult = LAST_CHAT_COLLECTION.findOne(query);
 
-            BasicDBList lastChats = new BasicDBList();
-            lastChats.add(lastChat);
-            
-            if (findResult != null) {
-                BasicDBObject document = new BasicDBObject();
-                document.append(ChatInfoDBKey.LAST_CHAT.ID, new ObjectId(userId));
-                document.append(ChatInfoDBKey.LAST_CHAT.LAST_CHAT, lastChats);
-                
-                LAST_CHAT_COLLECTION.insert(document);
-            } else {
-                BasicDBObject push = new BasicDBObject("$push", 
-                        new BasicDBObject(ChatInfoDBKey.LAST_CHAT.LAST_CHAT, lastChat));
-                
-                LAST_CHAT_COLLECTION.update(query, push, true, false);
-            }
-        }   
+                if (findResult != null) {
+                    String keyUpdate = ChatInfoDBKey.LAST_CHAT.LAST_CHATS + ".$." + ChatInfoDBKey.LAST_CHAT.MESSAGE_ID;
+                    BasicDBObject document = new BasicDBObject(keyUpdate, messageId);
+                    BasicDBObject update = new BasicDBObject("$set", document);
+
+                    LAST_CHAT_COLLECTION.update(query, update);
+                } else {
+                    BasicDBObject updateQuery = new BasicDBObject(ChatInfoDBKey.LAST_CHAT.ID, id);
+                    BasicDBObject updateLastChat = new BasicDBObject(ChatInfoDBKey.LAST_CHAT.FRIEND_ID, friendId);
+                    updateLastChat.append(ChatInfoDBKey.LAST_CHAT.MESSAGE_ID, messageId);
+
+                    BasicDBObject lastChats = new BasicDBObject(ChatInfoDBKey.LAST_CHAT.LAST_CHATS, updateLastChat);
+                    BasicDBObject updateCommand = new BasicDBObject("$push", lastChats);
+                    LAST_CHAT_COLLECTION.update(updateQuery, updateCommand, true, false);
+                }
+            }   
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

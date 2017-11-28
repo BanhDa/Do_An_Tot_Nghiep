@@ -9,13 +9,13 @@ import com.mycompany.usermanagementserver.entity.Socket;
 import com.mycompany.usermanagementserver.entity.message.Message;
 import com.mycompany.usermanagementserver.lastchat.LastChatManagement;
 import com.mycompany.usermanagementserver.serversocket.log.LogContainer;
-import com.mycompany.usermanagementserver.serversocket.log.LogExecutor;
+import com.mycompany.usermanagementserver.serversocket.log.LogLastChatExecutor;
+import com.mycompany.usermanagementserver.serversocket.log.LogMessageChatExecutor;
+import com.mycompany.usermanagementserver.serversocket.log.LogUnreadMessageExecutor;
 import com.mycompany.usermanagementserver.serversocket.userconnectionmanagement.UserConnection;
 import com.mycompany.usermanagementserver.serversocket.userconnectionmanagement.UserConnectionsManagement;
 import com.mycompany.usermanagementserver.unreadmessage.UnreadMessageManagement;
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
 import java.util.UUID;
 
 /**
@@ -68,18 +68,25 @@ public class EventChatExecutor implements Runnable{
         }
     }
     
-    private void increaseUnreadMessage(String userId, String friendId) {
-        UnreadMessageManagement.increase(userId, friendId);
+    private void increaseUnreadMessage(String fromUserId, String toUserId) {
+        UnreadMessageManagement.increase(toUserId, fromUserId);
+        
+        LogUnreadMessageExecutor logUnreadTask = new LogUnreadMessageExecutor(toUserId, fromUserId);
+        LogContainer.addTask(logUnreadTask);
     }
     
     private void pushLastChat(String userId, String friendId, String messageId) {
         LastChatManagement.putLastChat(userId, friendId, messageId);
         LastChatManagement.putLastChat(friendId, userId, messageId);
         
+        LogLastChatExecutor lastChatFromUser = new LogLastChatExecutor(userId, friendId, messageId);
+        LogContainer.addTask(lastChatFromUser);
+        LogLastChatExecutor lastChatToUser = new LogLastChatExecutor(friendId, userId, messageId);
+        LogContainer.addTask(lastChatToUser);;
     }
     
     private void logToDB(Message message) {
-        LogExecutor task = new LogExecutor(message);
+        LogMessageChatExecutor task = new LogMessageChatExecutor(message);
         LogContainer.addTask(task);
     }
 }

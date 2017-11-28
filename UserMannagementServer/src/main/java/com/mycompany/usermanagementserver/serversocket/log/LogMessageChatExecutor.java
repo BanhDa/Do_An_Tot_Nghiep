@@ -12,11 +12,11 @@ import com.mycompany.usermanagementserver.entity.message.Message;
  *
  * @author tuantran
  */
-public class LogExecutor implements Runnable{
+public class LogMessageChatExecutor implements Runnable{
     
     private Message message;
 
-    public LogExecutor(Message message) {
+    public LogMessageChatExecutor(Message message) {
         this.message = message;
     }
     
