@@ -20,5 +20,5 @@ public class ChatLogDBKey {
     public static final String MESSAGE_TYPE = "message_type";
     public static final String VALUE = "value";
     public static final String READ_TIME = "real_time";
-    
+    public static final String MESSAGE_ID = "message_id";
 }

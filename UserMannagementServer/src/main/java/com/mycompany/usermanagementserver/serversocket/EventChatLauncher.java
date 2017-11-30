@@ -79,11 +79,4 @@ public class EventChatLauncher {
         server.stop(); 
     } 
     
-    public static void main(String[] srgs) {
-        try {
-            start();
-        } catch (InterruptedException ex) {
-            ex.printStackTrace();
-        }
-    }
 }

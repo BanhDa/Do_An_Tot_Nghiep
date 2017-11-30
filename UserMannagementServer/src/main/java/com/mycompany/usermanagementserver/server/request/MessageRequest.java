@@ -13,6 +13,7 @@ public class MessageRequest {
     
     private String token;
     private String id;
+    private String messageId;
     private String fromUserId;
     private String toUserId;
     private String time;
@@ -26,6 +27,14 @@ public class MessageRequest {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public String getMessageId() {
+        return messageId;
+    }
+
+    public void setMessageId(String messageId) {
+        this.messageId = messageId;
     }
 
     public String getToken() {

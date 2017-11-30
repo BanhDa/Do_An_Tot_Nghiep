@@ -13,6 +13,8 @@ import com.mycompany.usermanagementserver.dao.DBManagement;
 import com.mycompany.usermanagementserver.entity.message.Message;
 import com.mycompany.usermanagementserver.server.repository.common.MongoHelper;
 import com.mycompany.webchatutil.constant.mongodbkey.ChatLogDBKey;
+import com.mycompany.webchatutil.utils.StringUtils;
+import org.bson.types.ObjectId;
 
 /**
  *
@@ -49,6 +51,7 @@ public class ChatLogDAO {
         try {
             message = new Message();
             message.setId( obj.getObjectId(ChatLogDBKey.ID).toString() );
+            message.setMessageId( obj.getString(ChatLogDBKey.MESSAGE_ID) );
             message.setFromUserId( obj.getString(ChatLogDBKey.FROM_USER_ID) );
             message.setToUserId( obj.getString(ChatLogDBKey.TO_USER_ID) );
             message.setMessageType( obj.getString( ChatLogDBKey.MESSAGE_TYPE) );
@@ -67,6 +70,11 @@ public class ChatLogDAO {
         BasicDBObject result = new BasicDBObject();
         
         if (message != null) {
+            if (StringUtils.isValid( message.getId() )) {
+                ObjectId id = new ObjectId(message.getId());
+                MongoHelper.put(result, ChatLogDBKey.ID, id);
+            }
+            MongoHelper.put(result, ChatLogDBKey.MESSAGE_ID, message.getMessageId());
             MongoHelper.put(result, ChatLogDBKey.FROM_USER_ID, message.getFromUserId());
             MongoHelper.put(result, ChatLogDBKey.TO_USER_ID, message.getToUserId());
             MongoHelper.put(result, ChatLogDBKey.MESSAGE_TYPE, message.getMessageType());

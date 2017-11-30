@@ -37,7 +37,7 @@ public class EventChatExecutor implements Runnable{
         try {
             sendMessage(userConnection, message);
             increaseUnreadMessage(message.getFromUserId(), message.getToUserId());
-            pushLastChat(message.getFromUserId(), message.getToUserId(), message.getId());
+            pushLastChat(message.getFromUserId(), message.getToUserId(), message.getMessageId());
             logToDB(message);
         } catch (Exception ex) {
             ex.printStackTrace();

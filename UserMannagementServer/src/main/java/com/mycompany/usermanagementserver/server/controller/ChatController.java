@@ -8,7 +8,6 @@ package com.mycompany.usermanagementserver.server.controller;
 import com.mycompany.usermanagementserver.entity.message.Message;
 import com.mycompany.usermanagementserver.exception.UserManagememtException;
 import com.mycompany.usermanagementserver.lastchat.LastChat;
-import com.mycompany.usermanagementserver.lastchat.LastChatManagement;
 import com.mycompany.usermanagementserver.server.domain.User;
 import com.mycompany.usermanagementserver.server.request.Request;
 import com.mycompany.usermanagementserver.server.request.SearchRequest;

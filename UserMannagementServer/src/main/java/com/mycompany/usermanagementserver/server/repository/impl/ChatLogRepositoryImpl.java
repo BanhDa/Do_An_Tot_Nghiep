@@ -13,7 +13,6 @@ import com.mongodb.DBObject;
 import com.mongodb.MongoClient;
 import com.mongodb.QueryBuilder;
 import com.mycompany.usermanagementserver.entity.message.Message;
-import com.mycompany.usermanagementserver.entity.message.MessageType;
 import com.mycompany.usermanagementserver.server.repository.ChatLogRepository;
 import com.mycompany.usermanagementserver.server.repository.common.MongoHelper;
 import com.mycompany.webchatutil.constant.mongodbkey.ChatLogDBKey;
@@ -51,7 +50,7 @@ public class ChatLogRepositoryImpl implements ChatLogRepository{
         try {
             if (StringUtils.isValid(userId, messageId)) {
                 DBCollection collection = getCollection(userId);
-                BasicDBObject query = new BasicDBObject(ChatLogDBKey.ID, new ObjectId(messageId));
+                BasicDBObject query = new BasicDBObject(ChatLogDBKey.MESSAGE_ID, messageId);
                 BasicDBObject obj = (BasicDBObject) collection.findOne(query);
                 if (obj != null) {
                     result = parseToObject(obj);
@@ -72,12 +71,7 @@ public class ChatLogRepositoryImpl implements ChatLogRepository{
             if (messageIds != null && !messageIds.isEmpty()) {
                 DBCollection collection = getCollection(userId);
                 
-                List<ObjectId> ids = new ArrayList<>();
-                for (String messageId : messageIds) {
-                    ObjectId id = new ObjectId(messageId);
-                    ids.add(id);
-                }
-                DBObject query = QueryBuilder.start(ChatLogDBKey.ID).in(ids).get();
+                DBObject query = QueryBuilder.start(ChatLogDBKey.MESSAGE_ID).in(messageIds).get();
                 BasicDBObject sortByTime = new BasicDBObject(ChatLogDBKey.TIME, -1);
                 try (DBCursor cursor = collection.find(query).sort(sortByTime) ) {
                     while (cursor.hasNext()) {                        
@@ -140,6 +134,7 @@ public class ChatLogRepositoryImpl implements ChatLogRepository{
         try {
             message = new Message();
             message.setId( obj.getObjectId(ChatLogDBKey.ID).toString() );
+            message.setMessageId( obj.getString(ChatLogDBKey.MESSAGE_ID) );
             message.setFromUserId( obj.getString(ChatLogDBKey.FROM_USER_ID) );
             message.setToUserId( obj.getString(ChatLogDBKey.TO_USER_ID) );
             message.setValue( obj.getString(ChatLogDBKey.VALUE) );
@@ -158,6 +153,11 @@ public class ChatLogRepositoryImpl implements ChatLogRepository{
         BasicDBObject result = new BasicDBObject();
         
         if (message != null) {
+            if (StringUtils.isValid( message.getId() )) {
+                ObjectId id = new ObjectId(message.getId());
+                MongoHelper.put(result, ChatLogDBKey.ID, id);
+            }
+            MongoHelper.put(result, ChatLogDBKey.MESSAGE_ID, message.getMessageId());
             MongoHelper.put(result, ChatLogDBKey.FROM_USER_ID, message.getFromUserId());
             MongoHelper.put(result, ChatLogDBKey.TO_USER_ID, message.getToUserId());
             MongoHelper.put(result, ChatLogDBKey.MESSAGE_TYPE, message.getMessageType());
