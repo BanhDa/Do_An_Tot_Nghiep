@@ -9,13 +9,13 @@ package com.mycompany.usermanagementserver.entity.message;
  *
  * @author tuantran
  */
-public class Message {
+public class Message implements Comparable<Message>{
     
     private String id;
     private String messageId;
     private String fromUserId;
     private String toUserId;
-    private String time;
+    private Long time;
     private String readTime;
     private String messageType;
     private String value;
@@ -52,11 +52,11 @@ public class Message {
         this.toUserId = toUserId;
     }
 
-    public String getTime() {
+    public Long getTime() {
         return time;
     }
 
-    public void setTime(String time) {
+    public void setTime(Long time) {
         this.time = time;
     }
 
@@ -82,6 +82,11 @@ public class Message {
 
     public void setValue(String value) {
         this.value = value;
+    }
+
+    @Override
+    public int compareTo(Message o) {
+        return this.time.compareTo(o.getTime());
     }
     
 }

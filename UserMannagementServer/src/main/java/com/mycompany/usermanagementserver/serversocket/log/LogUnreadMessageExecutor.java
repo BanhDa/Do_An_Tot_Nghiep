@@ -5,7 +5,7 @@
  */
 package com.mycompany.usermanagementserver.serversocket.log;
 
-import com.mycompany.usermanagementserver.dao.DAO.UnreadMessageDAO;
+import com.mycompany.usermanagementserver.serversocket.dao.DAO.UnreadMessageDAO;
 import com.mycompany.webchatutil.utils.StringUtils;
 
 /**

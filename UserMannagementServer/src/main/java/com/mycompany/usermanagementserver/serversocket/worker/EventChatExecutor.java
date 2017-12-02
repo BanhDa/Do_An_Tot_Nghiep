@@ -52,9 +52,9 @@ public class EventChatExecutor implements Runnable{
     private void sendMessage(String userId, Message message) {
         Collection<UserConnection> userConnections = UserConnectionsManagement.getAllConnectionOfUser(userId);
         if (userConnections != null && !userConnections.isEmpty()) {
-            userConnections.forEach((connection) -> {
-                connection.getSocket().sendEvent(Socket.EVENT_CHAT, message);
-            });
+            for (UserConnection userConnect : userConnections) {
+                userConnect.getSocket().sendEvent(Socket.EVENT_CHAT, message);
+            }
         }
     }
     
@@ -62,9 +62,11 @@ public class EventChatExecutor implements Runnable{
         Collection<UserConnection> userConnections = UserConnectionsManagement.getAllConnectionOfUser( userConnection.getUserId() );
         UUID sessionConnection = userConnection.getSocket().getSessionId();
         if (userConnections != null && !userConnections.isEmpty()) {
-            userConnections.stream().filter((connection) -> (!sessionConnection.equals( connection.getSocket().getSessionId() ))).forEachOrdered((connection) -> {
-                connection.getSocket().sendEvent(Socket.EVENT_CHAT, message);
-            });
+            for (UserConnection userConnect : userConnections) {
+                if ( !sessionConnection.equals( userConnect.getSocket().getSessionId() )) {
+                    userConnect.getSocket().sendEvent(Socket.EVENT_CHAT, message);
+                }
+            }
         }
     }
     

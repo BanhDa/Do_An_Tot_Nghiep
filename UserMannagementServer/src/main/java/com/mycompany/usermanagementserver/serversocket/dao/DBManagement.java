@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.mycompany.usermanagementserver.dao;
+package com.mycompany.usermanagementserver.serversocket.dao;
 
 import com.mongodb.DB;
 import com.mongodb.MongoClient;

@@ -5,7 +5,7 @@
  */
 package com.mycompany.usermanagementserver.unreadmessage;
 
-import com.mycompany.usermanagementserver.dao.DAO.UnreadMessageDAO;
+import com.mycompany.usermanagementserver.serversocket.dao.DAO.UnreadMessageDAO;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;

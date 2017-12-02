@@ -19,6 +19,7 @@ import com.mycompany.webchatutil.constant.mongodbkey.ChatLogDBKey;
 import com.mycompany.webchatutil.utils.StringUtils;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -103,7 +104,7 @@ public class ChatLogRepositoryImpl implements ChatLogRepository{
         list.add(friendIdReceiver);
         
         BasicDBObject query = new BasicDBObject("$or", list);
-        BasicDBObject sortBySendTime = new BasicDBObject(ChatLogDBKey.TIME, 1);
+        BasicDBObject sortBySendTime = new BasicDBObject(ChatLogDBKey.TIME, -1);
         
         try {
             DBCursor cursor = collection.find(query).sort(sortBySendTime);
@@ -118,6 +119,7 @@ public class ChatLogRepositoryImpl implements ChatLogRepository{
                     results.add(message);
                 }
             }
+            Collections.sort(results);
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -139,7 +141,7 @@ public class ChatLogRepositoryImpl implements ChatLogRepository{
             message.setToUserId( obj.getString(ChatLogDBKey.TO_USER_ID) );
             message.setValue( obj.getString(ChatLogDBKey.VALUE) );
             message.setMessageType( obj.getString( ChatLogDBKey.MESSAGE_TYPE) );
-            message.setTime( obj.getString(ChatLogDBKey.TIME) );
+            message.setTime( obj.getLong(ChatLogDBKey.TIME) );
             message.setReadTime( obj.getString(ChatLogDBKey.READ_TIME) );
         } catch (Exception ex) {
             System.out.println("parse message error");

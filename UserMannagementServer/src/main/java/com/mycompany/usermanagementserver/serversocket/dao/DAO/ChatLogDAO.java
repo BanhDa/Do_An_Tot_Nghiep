@@ -3,13 +3,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.mycompany.usermanagementserver.dao.DAO;
+package com.mycompany.usermanagementserver.serversocket.dao.DAO;
 
 import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
 import com.mongodb.DBCollection;
 import com.mongodb.DBObject;
-import com.mycompany.usermanagementserver.dao.DBManagement;
+import com.mycompany.usermanagementserver.serversocket.dao.DBManagement;
 import com.mycompany.usermanagementserver.entity.message.Message;
 import com.mycompany.usermanagementserver.server.repository.common.MongoHelper;
 import com.mycompany.webchatutil.constant.mongodbkey.ChatLogDBKey;
@@ -56,7 +56,7 @@ public class ChatLogDAO {
             message.setToUserId( obj.getString(ChatLogDBKey.TO_USER_ID) );
             message.setMessageType( obj.getString( ChatLogDBKey.MESSAGE_TYPE) );
             message.setValue( obj.getString(ChatLogDBKey.VALUE) );
-            message.setTime( obj.getString(ChatLogDBKey.TIME) );
+            message.setTime( obj.getLong(ChatLogDBKey.TIME) );
             message.setReadTime( obj.getString(ChatLogDBKey.READ_TIME) );
         } catch (Exception ex) {
             System.out.println("parse message error");

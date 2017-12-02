@@ -51,10 +51,6 @@ public class EventChatLauncher {
             }
         }));
 
-//        server.addEventListener("disconn", String.class, ((SocketIOClient socketIOClient, String token, AckRequest ackRequest) -> {
-//            System.out.println("connected");
-//        }));
-        
         server.addEventListener(Socket.EVENT_CHAT, MessageRequest.class, (SocketIOClient socketIOClient, MessageRequest data, AckRequest ackRequest) -> {
 
             if (Helper.checkToken(data.getToken())) {

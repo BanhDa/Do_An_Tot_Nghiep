@@ -16,7 +16,7 @@ public class MessageRequest {
     private String messageId;
     private String fromUserId;
     private String toUserId;
-    private String time;
+    private Long time;
     private String readTime;
     private String messageType;
     private String value;
@@ -61,11 +61,11 @@ public class MessageRequest {
         this.toUserId = toUserId;
     }
 
-    public String getTime() {
+    public Long getTime() {
         return time;
     }
 
-    public void setTime(String time) {
+    public void setTime(Long time) {
         this.time = time;
     }
 

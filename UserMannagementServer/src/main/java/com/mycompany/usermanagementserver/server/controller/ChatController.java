@@ -7,7 +7,6 @@ package com.mycompany.usermanagementserver.server.controller;
 
 import com.mycompany.usermanagementserver.entity.message.Message;
 import com.mycompany.usermanagementserver.exception.UserManagememtException;
-import com.mycompany.usermanagementserver.lastchat.LastChat;
 import com.mycompany.usermanagementserver.server.domain.User;
 import com.mycompany.usermanagementserver.server.request.Request;
 import com.mycompany.usermanagementserver.server.request.SearchRequest;
@@ -75,8 +74,8 @@ public class ChatController {
                     User friendInfo = friendsInfo.get( countFriendInfo );
                     String friendId = message.getFromUserId().equals(userId) ? message.getToUserId() : message.getFromUserId();
                     if ( friendInfo.getUserId().equals(friendId) ) {
-                        LastChat lastChat = new LastChat(friendInfo, message);
-                        LastChatResponse lastChatResponse = ModelMapperUtils.toObject(lastChat, LastChatResponse.class);
+                        LastChatResponse lastChatResponse = ModelMapperUtils.toObject(message, LastChatResponse.class);
+                        addUserInfo(lastChatResponse, friendInfo);
                         lastChatResponses.add(lastChatResponse);
                         countFriendInfo++;
                         countLastMessage++;
@@ -89,14 +88,13 @@ public class ChatController {
                 
                 if (countFriendInfo < friendInfoSize) {
                     for (int i = countFriendInfo; i < friendInfoSize; i++) {
-                        LastChat lastChat = new LastChat(  friendsInfo.get(i) );
-                        LastChatResponse lastChatResponse = ModelMapperUtils.toObject(lastChat, LastChatResponse.class);
+                        LastChatResponse lastChatResponse = ModelMapperUtils.toObject(friendsInfo.get(i), LastChatResponse.class);
                         lastChatResponses.add(lastChatResponse);
                     }
                 } else if (countLastMessage < lastMessageSize) {
                     for (int i = countLastMessage; i < lastMessageSize; i++) {
-                        LastChat lastChat = new LastChat( lastMessages.get(i) );
-                        LastChatResponse lastChatResponse = ModelMapperUtils.toObject(lastChat, LastChatResponse.class);
+                        LastChatResponse lastChatResponse = ModelMapperUtils.toObject(lastMessages.get(i), LastChatResponse.class);
+                        
                         lastChatResponses.add(lastChatResponse);
                     }
                 }
@@ -114,6 +112,14 @@ public class ChatController {
         }
         
         return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+   
+    private void addUserInfo(LastChatResponse lastChatResponse, User user) {
+        if (lastChatResponse != null && user != null) {
+            lastChatResponse.userId = user.getUserId();
+            lastChatResponse.setUserName( user.getUserName() );
+            lastChatResponse.setAvatar( user.getAvatar() );
+        }
     }
     
     @RequestMapping("/history")

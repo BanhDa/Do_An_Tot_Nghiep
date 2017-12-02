@@ -5,7 +5,7 @@
  */
 package com.mycompany.usermanagementserver.serversocket.log;
 
-import com.mycompany.usermanagementserver.dao.DAO.ChatLogDAO;
+import com.mycompany.usermanagementserver.serversocket.dao.DAO.ChatLogDAO;
 import com.mycompany.usermanagementserver.entity.message.Message;
 
 /**

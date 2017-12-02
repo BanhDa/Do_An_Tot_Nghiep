@@ -5,8 +5,7 @@
  */
 package com.mycompany.usermanagementserver.lastchat;
 
-import com.mycompany.usermanagementserver.dao.DAO.LastChatDAO;
-import com.mycompany.webchatutil.utils.StringUtils;
+import com.mycompany.usermanagementserver.serversocket.dao.DAO.LastChatDAO;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;

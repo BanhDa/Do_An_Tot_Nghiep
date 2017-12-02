@@ -9,6 +9,7 @@ import com.mycompany.webchatutil.utils.StringUtils;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -34,9 +35,11 @@ public class UserConnectionsManagement {
     public static Collection<UserConnection> getAllConnectionOfUser(String userId) {
         Collection<UserConnection> results = new ArrayList<>();
         
-        HashMap<UUID, UserConnection> map = CONTAINER.get(userId);
-        if (map != null) {
-            results = map.values();
+        if (StringUtils.isValid(userId)) {
+            HashMap<UUID, UserConnection> map = CONTAINER.get(userId);
+            if (map != null) {
+                results = map.values();
+            }
         }
         
         return results;
@@ -45,7 +48,12 @@ public class UserConnectionsManagement {
     public static boolean existsConnection(String userId, UUID connectionSession) {
         HashMap<UUID, UserConnection> allConnections = CONTAINER.get(userId);
         if (allConnections != null && !allConnections.isEmpty()) {
-            return allConnections.containsKey(connectionSession);
+            for (Map.Entry<UUID, UserConnection> entry : allConnections.entrySet()) {
+                UUID key = entry.getKey();
+                if (key.equals(connectionSession)) {
+                    return true;
+                }
+            }
         }
         return false;
     }

@@ -3,14 +3,14 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.mycompany.usermanagementserver.dao.DAO;
+package com.mycompany.usermanagementserver.serversocket.dao.DAO;
 
 import com.mongodb.BasicDBList;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBCollection;
 import com.mongodb.DBCursor;
 import com.mongodb.DBObject;
-import com.mycompany.usermanagementserver.dao.DBManagement;
+import com.mycompany.usermanagementserver.serversocket.dao.DBManagement;
 import com.mycompany.webchatutil.constant.mongodbkey.ChatInfoDBKey;
 import com.mycompany.webchatutil.utils.StringUtils;
 import java.util.HashMap;

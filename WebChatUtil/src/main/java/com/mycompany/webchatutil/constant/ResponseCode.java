@@ -26,4 +26,7 @@ public class ResponseCode {
     public static final int INVALID_TOKEN = 6;
     
     public static final int NOT_EXIST_USER = 7;
+    public static final int FILE_NOT_FOUND = 8;
+    public static final int SAVE_FILE_ERROR = 9;
+    public static final int WRITE_FILE_ERROR = 10;
 }

@@ -11,18 +11,103 @@ package com.mycompany.usermanagementserver.server.response;
  */
 public class LastChatResponse {
     
-    private String userId;
+    public String userId;
     private String userName;
-    private String email;
-    private String birthday;
-    private Integer gender;
     private String avatar;
     
     private String id;
+    private String messageId;
     private String fromUserId;
     private String toUserId;
     private String time;
     private String readTime;
     private String messageType;
     private String value;
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+    
+    public String getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getMessageId() {
+        return messageId;
+    }
+
+    public void setMessageId(String messageId) {
+        this.messageId = messageId;
+    }
+
+    public String getFromUserId() {
+        return fromUserId;
+    }
+
+    public void setFromUserId(String fromUserId) {
+        this.fromUserId = fromUserId;
+    }
+
+    public String getToUserId() {
+        return toUserId;
+    }
+
+    public void setToUserId(String toUserId) {
+        this.toUserId = toUserId;
+    }
+
+    public String getTime() {
+        return time;
+    }
+
+    public void setTime(String time) {
+        this.time = time;
+    }
+
+    public String getReadTime() {
+        return readTime;
+    }
+
+    public void setReadTime(String readTime) {
+        this.readTime = readTime;
+    }
+
+    public String getMessageType() {
+        return messageType;
+    }
+
+    public void setMessageType(String messageType) {
+        this.messageType = messageType;
+    }
+
+    public String getValue() {
+        return value;
+    }
+
+    public void setValue(String value) {
+        this.value = value;
+    }
+
+    @Override
+    public String toString() {
+        return "LastChatResponse{" + "userId=" + userId + ", userName=" + userName + ", avatar=" + avatar + ", id=" + id + ", messageId=" + messageId + ", fromUserId=" + fromUserId + ", toUserId=" + toUserId + ", time=" + time + ", readTime=" + readTime + ", messageType=" + messageType + ", value=" + value + '}';
+    }
+    
+    
 }

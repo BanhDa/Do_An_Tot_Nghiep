@@ -10,4 +10,7 @@ redis:
 mongodb:
     host: localhost
     port: 27017
+
+folder:
+    image: E:\\doan\\image
         

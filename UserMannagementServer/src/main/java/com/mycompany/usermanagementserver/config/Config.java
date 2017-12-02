@@ -34,6 +34,8 @@ public class Config {
     public String mongoHost;
     @Value("${mongodb.port}")
     public Integer mongoPort;
+    @Value("${folder.image}")
+    public String folderImage;
     
     @Bean
     public MongoClient mongoClient() throws UnknownHostException {

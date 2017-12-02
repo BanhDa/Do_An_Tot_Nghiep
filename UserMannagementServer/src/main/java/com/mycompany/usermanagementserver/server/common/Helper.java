@@ -13,7 +13,11 @@ import com.mycompany.usermanagementserver.session.Session;
 import com.mycompany.usermanagementserver.session.SessionManagement;
 import com.mycompany.webchatutil.constant.Constant;
 import com.mycompany.webchatutil.constant.ResponseCode;
+import com.mycompany.webchatutil.utils.DateFormat;
 import com.mycompany.webchatutil.utils.StringUtils;
+import java.io.File;
+import java.util.Date;
+import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -75,4 +79,15 @@ public class Helper {
             SessionManagement.resetSession(token);
         }
     }
+    
+    public static String createUrlPath(String fileType) {
+        String filename = UUID.randomUUID().toString() + "." + fileType;
+        String dateString = DateFormat.format(new Date());
+        StringBuilder monthYear = new StringBuilder();
+        monthYear.append(dateString.substring(0, 4)).append(dateString.substring(4, 6));
+            
+        return monthYear.toString() + File.separator + dateString.subSequence(6, 8) + File.separator + filename;
+
+    }
+    
 }
