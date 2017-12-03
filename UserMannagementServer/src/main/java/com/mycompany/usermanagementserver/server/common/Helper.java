@@ -81,12 +81,12 @@ public class Helper {
     }
     
     public static String createUrlPath(String fileType) {
-        String filename = UUID.randomUUID().toString() + "." + fileType;
-        String dateString = DateFormat.format(new Date());
-        StringBuilder monthYear = new StringBuilder();
-        monthYear.append(dateString.substring(0, 4)).append(dateString.substring(4, 6));
-            
-        return monthYear.toString() + File.separator + dateString.subSequence(6, 8) + File.separator + filename;
+        return UUID.randomUUID().toString() + "." + fileType;
+//        String dateString = DateFormat.format(new Date());
+//        StringBuilder monthYear = new StringBuilder();
+//        monthYear.append(dateString.substring(0, 4)).append(dateString.substring(4, 6));
+//            
+//        return monthYear.toString() + File.separator + dateString.subSequence(6, 8) + File.separator + filename;
 
     }
     

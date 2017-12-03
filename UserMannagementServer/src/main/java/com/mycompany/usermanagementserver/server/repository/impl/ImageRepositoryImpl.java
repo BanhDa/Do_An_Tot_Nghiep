@@ -35,7 +35,7 @@ public class ImageRepositoryImpl implements ImageRepository{
     
     @Autowired
     public ImageRepositoryImpl(MongoClient mongoClient) {
-        MongoDbFactory factory = new SimpleMongoDbFactory(mongoClient, ChatLogDBKey.DB_NAME);
+        MongoDbFactory factory = new SimpleMongoDbFactory(mongoClient, StaticFileDBKey.DB_NAME);
         mongoOperations = new MongoTemplate(factory);
     }
     

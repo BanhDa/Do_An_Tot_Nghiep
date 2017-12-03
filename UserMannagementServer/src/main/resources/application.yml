@@ -12,5 +12,5 @@ mongodb:
     port: 27017
 
 folder:
-    image: E:\\doan\\image
+    image: E:\\doan\\image\\
         

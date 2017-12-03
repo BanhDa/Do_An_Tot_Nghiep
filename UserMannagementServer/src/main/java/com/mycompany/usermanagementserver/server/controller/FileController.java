@@ -9,6 +9,7 @@ import com.mycompany.usermanagementserver.config.Config;
 import com.mycompany.usermanagementserver.exception.UserManagememtException;
 import com.mycompany.usermanagementserver.server.common.Helper;
 import com.mycompany.usermanagementserver.server.domain.Image;
+import com.mycompany.usermanagementserver.server.request.FileRequest;
 import com.mycompany.usermanagementserver.server.request.Request;
 import com.mycompany.usermanagementserver.server.response.Response;
 import com.mycompany.usermanagementserver.server.response.ResponseMessage;
@@ -18,14 +19,18 @@ import com.mycompany.usermanagementserver.server.service.base.TokenService;
 import com.mycompany.webchatutil.constant.FilesAndFolders;
 import com.mycompany.webchatutil.constant.ResponseCode;
 import com.mycompany.webchatutil.utils.StringUtils;
+import java.util.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -38,38 +43,41 @@ import org.springframework.web.multipart.MultipartFile;
 public class FileController {
     
     @Autowired
-    private Config config;
-    @Autowired
     private SessionService sessionService;
     @Autowired
     private TokenService tokenService;
     @Autowired
     private FilesService filesService;
     
-    @PostMapping("/uploadimage")
-    public ResponseEntity<Response> singleFileUpload(@RequestHeader(Request.AUTHORIZATION) String token,
-            @RequestParam("file") MultipartFile file) {
+    @PostMapping(value="/uploadimage")
+    public ResponseEntity<Response> singleFileUpload(@RequestParam("image") MultipartFile file, 
+            @RequestParam("userid") String userId) {
 
         Response response = new Response();
 
         try {
-            if (!sessionService.checkToken(token)) {
-                throw new UserManagememtException(ResponseCode.INVALID_TOKEN, ResponseMessage.INVALID_TOKEN);
-            }
+//            if (!sessionService.checkToken(token)) {
+//                throw new UserManagememtException(ResponseCode.INVALID_TOKEN, ResponseMessage.INVALID_TOKEN);
+//            }
             
-            if (file.isEmpty()) {
-                byte[] bytes = file.getBytes();
-                String urlPath = Helper.createUrlPath(FilesAndFolders.IMAGE_JPG_EXTENSION);
-                String urlImage = config.folderImage + urlPath;
-                filesService.writeFile(urlImage, bytes);
+            if (file != null && !file.isEmpty()) {
                 
-                String userId = tokenService.getUserId(token);
-                Image image = new Image(userId, urlPath, System.currentTimeMillis());
+                byte[] bytes = file.getBytes();
+                String fileName = Helper.createUrlPath(FilesAndFolders.IMAGE_JPG_EXTENSION);
+                filesService.writeFile(fileName, bytes);
+                
+                Image image = new Image(userId, fileName, System.currentTimeMillis());
                 filesService.saveImage(image);
                 
                 response.setCode(ResponseCode.SUCCESSFUL);
                 response.setData(image);
+            } else {
+                throw  new UserManagememtException(ResponseCode.WRONG_DATA_FORMAT, ResponseMessage.IMAGE_ID_WRONG);
             }
+        } catch (UserManagememtException e) {
+            e.printStackTrace();
+            response.setCode(e.getCode());
+            response.setData(e.getMessage());
         } catch (Exception e) {
             e.printStackTrace();
             response.setCode(ResponseCode.UNKNOW_ERROR);
@@ -79,9 +87,9 @@ public class FileController {
     }
     
     @PostMapping("/loadimage")
-    public ResponseEntity<byte[]> loadImage(@RequestHeader(Request.AUTHORIZATION) String token,
+    public ResponseEntity<Response> loadImage(@RequestHeader(Request.AUTHORIZATION) String token,
                 @RequestParam("imageid") String imageId) {
-        byte[] images = new byte[0];
+        Response response = new Response();
         try {
             if (!sessionService.checkToken(token)) {
                 throw new UserManagememtException(ResponseCode.INVALID_TOKEN, ResponseMessage.INVALID_TOKEN);
@@ -90,15 +98,30 @@ public class FileController {
             if (StringUtils.isValid(imageId)) {
                 Image image = filesService.getImageByImageId(imageId);
                 if (image != null) {
-                    images = filesService.readFile(image.getPath());
+                    byte[] images = filesService.readFile(image.getPath());
+                    String imageBase64 = Base64.getEncoder().encodeToString(images);
+                    System.out.println(imageBase64);
+                    
+                    response.setCode(ResponseCode.SUCCESSFUL);
+                    response.setData(imageBase64);
+                } else {
+                    throw new UserManagememtException(ResponseCode.FILE_NOT_FOUND, ResponseMessage.FILE_NOT_FOUND);
                 }
             } else {
                 throw new UserManagememtException(ResponseCode.WRONG_DATA_FORMAT, ResponseMessage.IMAGE_ID_WRONG);
             }
+        } catch (UserManagememtException e) {
+            e.printStackTrace();
+            response.setCode(e.getCode());
+            response.setData(e.getMessage());
         } catch (Exception e) {
             e.printStackTrace();
+            response.setCode(ResponseCode.UNKNOW_ERROR);
+            response.setData(ResponseMessage.UNKNOW_ERROR);
         }
         
-        return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(images);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+//        return ResponseEntity.ok().contentType(MediaType.IMAGE_JPEG).body(images);
     }
+    
 }

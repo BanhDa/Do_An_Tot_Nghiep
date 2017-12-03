@@ -5,6 +5,7 @@
  */
 package com.mycompany.usermanagementserver.server.service.impl;
 
+import com.mycompany.usermanagementserver.config.Config;
 import com.mycompany.usermanagementserver.exception.UserManagememtException;
 import com.mycompany.usermanagementserver.server.domain.Image;
 import com.mycompany.usermanagementserver.server.repository.ImageRepository;
@@ -28,6 +29,8 @@ public class FilesServiceImpl implements FilesService{
     
     @Autowired
     private ImageRepository imageRepository;
+    @Autowired
+    private Config config;
     
     @Override
     public Image saveImage(Image image) throws UserManagememtException {
@@ -38,12 +41,13 @@ public class FilesServiceImpl implements FilesService{
     }
     
     @Override
-    public void writeFile(String urlImage, byte[] data) {
-        if (StringUtils.isValid(urlImage) 
+    public void writeFile(String fileName, byte[] data) {
+        if (StringUtils.isValid(fileName) 
                 && data != null
                 && data.length > 0) {
             
             try {
+                String urlImage = config.folderImage + fileName;
                 Path path = Paths.get(urlImage);
                 Files.write(path, data);
             } catch (IOException ex) {
@@ -63,10 +67,11 @@ public class FilesServiceImpl implements FilesService{
     }
     
     @Override
-    public byte[] readFile(String urlFile) throws UserManagememtException {
+    public byte[] readFile(String fileName) throws UserManagememtException {
         
         try {
-            Path path = Paths.get(urlFile);
+            String url = config.folderImage + fileName;
+            Path path = Paths.get(url);
             return Files.readAllBytes(path);
         } catch (IOException ex ) {
             ex.printStackTrace();
