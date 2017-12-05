@@ -17,4 +17,6 @@ public interface ImageRepository {
     public Image save(Image image) throws UserManagememtException;
     
     public Image findByImageId(String imageId) throws UserManagememtException;
+    
+    public Image findAvatar(String userId);
 }

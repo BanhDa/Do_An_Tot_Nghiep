@@ -6,6 +6,7 @@
 package com.mycompany.usermanagementserver.unreadmessage;
 
 import com.mycompany.usermanagementserver.serversocket.dao.DAO.UnreadMessageDAO;
+import com.mycompany.webchatutil.utils.StringUtils;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -21,6 +22,20 @@ public class UnreadMessageManagement {
     public static void cache() {
         Map<String, HashMap<String, Integer>> unreadMessages = UnreadMessageDAO.getAll();
         CONTAINER.putAll(unreadMessages);
+    }
+    
+    public static int getUnreadNumber(String userId, String friendId) {
+        int result = 0;
+        
+        if (StringUtils.isValid(userId, friendId)) {
+            Map<String, Integer> unreadMap = CONTAINER.get(userId);
+            if (unreadMap != null) {
+                Integer unreadNumber = unreadMap.get(friendId);
+                result = unreadNumber != null ? unreadNumber : 0;
+            }
+        }
+        
+        return result;
     }
     
     public static void increase(String userId, String friendId) {

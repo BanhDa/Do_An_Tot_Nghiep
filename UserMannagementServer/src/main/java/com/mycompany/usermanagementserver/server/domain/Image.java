@@ -25,6 +25,8 @@ public class Image {
     private String path;
     @Field(StaticFileDBKey.IMAGE.UPLOAD_TIME)
     private Long uploadTime;
+    @Field(StaticFileDBKey.IMAGE.IS_AVATAR)
+    private Integer isAvatar;
 
     public Image() {
     }
@@ -33,6 +35,13 @@ public class Image {
         this.userId = userId;
         this.path = path;
         this.uploadTime = uploadTime;
+    }
+
+    public Image(String userId, String path, Long uploadTime, Integer isAvatar) {
+        this.userId = userId;
+        this.path = path;
+        this.uploadTime = uploadTime;
+        this.isAvatar = isAvatar;
     }
 
     public String getImageId() {
@@ -65,6 +74,14 @@ public class Image {
 
     public void setUploadTime(Long uploadTime) {
         this.uploadTime = uploadTime;
+    }
+
+    public Integer getIsAvatar() {
+        return isAvatar;
+    }
+
+    public void setIsAvatar(Integer isAvatar) {
+        this.isAvatar = isAvatar;
     }
 
 }

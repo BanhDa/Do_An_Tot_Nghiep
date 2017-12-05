@@ -26,4 +26,6 @@ public interface UserService extends ServiceBase{
     public List<User> searchUser(String userId, String searchUserName, Integer skip, Integer take);
     
     public List<User> getUsersInfo(List<String> userIds);
+    
+    public boolean updateAvatar(String userId, String avatarId);
 }

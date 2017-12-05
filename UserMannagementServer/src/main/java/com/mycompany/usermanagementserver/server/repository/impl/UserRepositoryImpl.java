@@ -110,6 +110,21 @@ public class UserRepositoryImpl implements UserRepository{
         return results;
     }
     
+    @Override
+    public boolean updateAvatar(String userId, String avatarId) {
+        if (StringUtils.isValid(userId, avatarId)) {
+            ObjectId id = new ObjectId(userId);
+            Query query = new Query(Criteria.where(UserDBKey.USER.ID).is(id));
+            User user = mongoOperations.findOne(query, User.class);
+            if (user != null) {
+                user.setAvatar(avatarId);
+                mongoOperations.save(user);
+                return true;
+            }
+        }
+        return false;
+    }
+    
     private String createQuerySearchByUserName(String searchUserName) {
         String result = null;
         

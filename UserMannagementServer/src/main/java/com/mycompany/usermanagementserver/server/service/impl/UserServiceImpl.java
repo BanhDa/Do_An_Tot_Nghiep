@@ -100,6 +100,11 @@ public class UserServiceImpl implements UserService{
         return results;
     }
     
+    @Override
+    public boolean updateAvatar(String userId, String avatarId) {
+        return userRepository.updateAvatar(userId, avatarId);
+    }
+    
     private User createUpdateUser(User updateUser, User searchUser) {
         if ( StringUtils.isValid( updateUser.getAvatar() ) ) {
             searchUser.setAvatar( updateUser.getAvatar() );
@@ -121,5 +126,5 @@ public class UserServiceImpl implements UserService{
         }
         return searchUser;
     }
-    
+
 }

@@ -10,7 +10,6 @@ import com.mycompany.usermanagementserver.lastchat.LastChatManagement;
 import com.mycompany.usermanagementserver.server.repository.ChatLogRepository;
 import com.mycompany.usermanagementserver.server.service.base.ChatService;
 import java.util.Collection;
-import java.util.Date;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

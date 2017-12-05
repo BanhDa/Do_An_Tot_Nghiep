@@ -25,4 +25,9 @@ public class Constant {
     }
     
     public static final List<String> SPECIAL_CHARACTER = Arrays.asList("\\", "(", ")", "?", "$", ".", "*", "+", "^", "[", "]", "|");
+    
+    public static class FLAG {
+        public static final int ON = 1;
+        public static final int OFF = 0;
+    }
 }

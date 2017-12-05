@@ -5,13 +5,15 @@
  */
 package com.mycompany.usermanagementserver.server.response;
 
+import java.util.Date;
+
 /**
  *
  * @author tuantran
  */
 public class LastChatResponse {
     
-    public String userId;
+    public String friendId;
     private String userName;
     private String avatar;
     
@@ -19,10 +21,12 @@ public class LastChatResponse {
     private String messageId;
     private String fromUserId;
     private String toUserId;
-    private String time;
+    private Long time;
+    private Date timeDate;
     private String readTime;
     private String messageType;
     private String value;
+    private Integer unreadNumber;
 
     public String getUserName() {
         return userName;
@@ -72,11 +76,19 @@ public class LastChatResponse {
         this.toUserId = toUserId;
     }
 
-    public String getTime() {
+    public Long getTime() {
         return time;
     }
 
-    public void setTime(String time) {
+    public Date getTimeDate() {
+        return timeDate;
+    }
+
+    public void setTimeDate(Date timeDate) {
+        this.timeDate = timeDate;
+    }
+
+    public void setTime(Long time) {
         this.time = time;
     }
 
@@ -104,9 +116,17 @@ public class LastChatResponse {
         this.value = value;
     }
 
+    public Integer getUnreadNumber() {
+        return unreadNumber;
+    }
+
+    public void setUnreadNumber(Integer unreadNumber) {
+        this.unreadNumber = unreadNumber;
+    }
+
     @Override
     public String toString() {
-        return "LastChatResponse{" + "userId=" + userId + ", userName=" + userName + ", avatar=" + avatar + ", id=" + id + ", messageId=" + messageId + ", fromUserId=" + fromUserId + ", toUserId=" + toUserId + ", time=" + time + ", readTime=" + readTime + ", messageType=" + messageType + ", value=" + value + '}';
+        return "LastChatResponse{" + "friendId=" + friendId + ", userName=" + userName + ", avatar=" + avatar + ", id=" + id + ", messageId=" + messageId + ", fromUserId=" + fromUserId + ", toUserId=" + toUserId + ", time=" + time + ", readTime=" + readTime + ", messageType=" + messageType + ", value=" + value + '}';
     }
     
     

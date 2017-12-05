@@ -17,9 +17,11 @@ import com.mycompany.usermanagementserver.server.service.base.ChatService;
 import com.mycompany.usermanagementserver.server.service.base.SessionService;
 import com.mycompany.usermanagementserver.server.service.base.TokenService;
 import com.mycompany.usermanagementserver.server.service.base.UserService;
+import com.mycompany.usermanagementserver.unreadmessage.UnreadMessageManagement;
 import com.mycompany.webchatutil.constant.ResponseCode;
 import com.mycompany.webchatutil.utils.ModelMapperUtils;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -99,7 +101,7 @@ public class ChatController {
                     }
                 }
             }
-            
+            updateUnreadAndTimeSendMessage(userId, lastChatResponses);
             response.setCode(ResponseCode.SUCCESSFUL);
             response.setData(lastChatResponses);
         } catch (UserManagememtException ex) {
@@ -114,9 +116,24 @@ public class ChatController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
    
+    private void updateUnreadAndTimeSendMessage(String userId, List<LastChatResponse> lastChatResponses) {
+        if (lastChatResponses != null && !lastChatResponses.isEmpty()) {
+            for (LastChatResponse lastChatResponse : lastChatResponses) {
+                try {
+                    int unreadNumber = UnreadMessageManagement.getUnreadNumber(userId, lastChatResponse.friendId);
+                    lastChatResponse.setUnreadNumber(unreadNumber);
+                    Date date = new Date(lastChatResponse.getTime());
+                    lastChatResponse.setTimeDate(date);
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            }
+        }
+    }
+    
     private void addUserInfo(LastChatResponse lastChatResponse, User user) {
         if (lastChatResponse != null && user != null) {
-            lastChatResponse.userId = user.getUserId();
+            lastChatResponse.friendId = user.getUserId();
             lastChatResponse.setUserName( user.getUserName() );
             lastChatResponse.setAvatar( user.getAvatar() );
         }

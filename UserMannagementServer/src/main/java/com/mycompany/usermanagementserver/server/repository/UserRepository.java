@@ -23,4 +23,6 @@ public interface UserRepository{
     public List<User> searchByName(String userId, String searhUserName);
     
     public List<User> getUsersInfo(List<String> userIds);
+    
+    public boolean updateAvatar(String userId, String avatarId);
 }

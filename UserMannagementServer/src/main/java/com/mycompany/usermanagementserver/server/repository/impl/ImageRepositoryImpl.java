@@ -10,8 +10,8 @@ import com.mycompany.usermanagementserver.exception.UserManagememtException;
 import com.mycompany.usermanagementserver.server.domain.Image;
 import com.mycompany.usermanagementserver.server.repository.ImageRepository;
 import com.mycompany.usermanagementserver.server.response.ResponseMessage;
+import com.mycompany.webchatutil.constant.Constant;
 import com.mycompany.webchatutil.constant.ResponseCode;
-import com.mycompany.webchatutil.constant.mongodbkey.ChatLogDBKey;
 import com.mycompany.webchatutil.constant.mongodbkey.StaticFileDBKey;
 import com.mycompany.webchatutil.utils.StringUtils;
 import org.bson.types.ObjectId;
@@ -59,4 +59,18 @@ public class ImageRepositoryImpl implements ImageRepository{
         }
         throw new UserManagememtException(ResponseCode.FILE_NOT_FOUND, ResponseMessage.FILE_NOT_FOUND);
     }
+
+    @Override
+    public Image findAvatar(String userId) {
+        Image image = null;
+        
+        if (StringUtils.isValid(userId)) {
+            Query query = new Query(Criteria.where(StaticFileDBKey.IMAGE.USER_ID).is(userId));
+            query.addCriteria(Criteria.where(StaticFileDBKey.IMAGE.IS_AVATAR).is(Constant.FLAG.ON));
+            image = mongoOperations.findOne(query, Image.class);
+        }
+        
+        return image;
+    }
+
 }

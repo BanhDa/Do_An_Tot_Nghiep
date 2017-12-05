@@ -19,5 +19,6 @@ public class StaticFileDBKey {
         public static final String USER_ID = "user_id";
         public static final String PATH = "path";
         public static final String UPLOAD_TIME = "upload_time";
+        public static final String IS_AVATAR = "is_avatar";
     }
 }

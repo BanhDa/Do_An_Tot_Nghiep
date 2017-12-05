@@ -78,4 +78,27 @@ public class FilesServiceImpl implements FilesService{
         }
         throw new UserManagememtException(ResponseCode.FILE_NOT_FOUND, ResponseMessage.FILE_NOT_FOUND);
     }
+
+    @Override
+    public Image updateAvatar(Image image) throws UserManagememtException {
+        return imageRepository.save(image);
+    }
+
+    @Override
+    public Image getAvatarByUserId(String userId) {
+        return imageRepository.findAvatar(userId);
+    }
+
+    @Override
+    public String getAvatar(String userId) {
+        String result = null;
+        if (StringUtils.isValid(userId)) {
+            Image image = imageRepository.findAvatar(userId);
+            if (image != null) {
+                result = image.getImageId();
+            }
+        }
+        
+        return result;
+    }
 }
