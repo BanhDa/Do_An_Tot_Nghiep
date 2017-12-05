@@ -13,5 +13,6 @@ public class Socket {
 
     public static final String EVENT_CONNECTION = "connection";
     public static final String EVENT_CHAT = "chat";
+    public static final String EVENT_READED_MESSAGE = "mark_read";
     
 }

@@ -22,14 +22,10 @@ import java.util.UUID;
  *
  * @author tuantran
  */
-public class EventChatExecutor implements Runnable{
-
-    private UserConnection userConnection;
-    private Message message;
-
+public class EventChatExecutor extends Executor{
+    
     public EventChatExecutor(UserConnection userConnection, Message message) {
-        this.userConnection = userConnection;
-        this.message = message;
+        super(userConnection, message);
     }
     
     @Override
@@ -41,32 +37,6 @@ public class EventChatExecutor implements Runnable{
             logToDB(message);
         } catch (Exception ex) {
             ex.printStackTrace();
-        }
-    }
-    
-    private void sendMessage(UserConnection userConnection, Message message) {
-        broadcast(userConnection, message);
-        sendMessage(message.getToUserId(), message);
-    }
-    
-    private void sendMessage(String userId, Message message) {
-        Collection<UserConnection> userConnections = UserConnectionsManagement.getAllConnectionOfUser(userId);
-        if (userConnections != null && !userConnections.isEmpty()) {
-            for (UserConnection userConnect : userConnections) {
-                userConnect.getSocket().sendEvent(Socket.EVENT_CHAT, message);
-            }
-        }
-    }
-    
-    private void broadcast(UserConnection userConnection, Message message) {
-        Collection<UserConnection> userConnections = UserConnectionsManagement.getAllConnectionOfUser( userConnection.getUserId() );
-        UUID sessionConnection = userConnection.getSocket().getSessionId();
-        if (userConnections != null && !userConnections.isEmpty()) {
-            for (UserConnection userConnect : userConnections) {
-                if ( !sessionConnection.equals( userConnect.getSocket().getSessionId() )) {
-                    userConnect.getSocket().sendEvent(Socket.EVENT_CHAT, message);
-                }
-            }
         }
     }
     

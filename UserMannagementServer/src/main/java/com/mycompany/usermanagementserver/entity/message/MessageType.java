@@ -9,6 +9,9 @@ package com.mycompany.usermanagementserver.entity.message;
  *
  * @author tuantran
  */
-public enum MessageType {
-    TEXT,
+public class MessageType {
+    
+    public static final String TEXT = "TEXT";
+    public static final String READ = "READ";
+    public static final String IMAGE = "IMAGE";
 }

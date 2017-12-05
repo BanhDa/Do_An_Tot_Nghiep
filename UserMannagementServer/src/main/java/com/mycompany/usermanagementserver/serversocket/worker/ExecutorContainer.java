@@ -14,7 +14,7 @@ import java.util.concurrent.TimeUnit;
  *
  * @author tuantran
  */
-public class EventChatContainer {
+public class ExecutorContainer {
     
     private static final ExecutorService threadPoolExecutor =
         new ThreadPoolExecutor(
@@ -25,7 +25,7 @@ public class EventChatContainer {
                 new LinkedBlockingQueue<>()
                 );
     
-    public static void addTask(EventChatExecutor eventChatExecutor) {
-        threadPoolExecutor.execute(eventChatExecutor);
+    public static void addTask(Executor executor) {
+        threadPoolExecutor.execute(executor);
     }
 }
