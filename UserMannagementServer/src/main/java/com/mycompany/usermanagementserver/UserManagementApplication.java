@@ -7,6 +7,7 @@ package com.mycompany.usermanagementserver;
 
 import com.mycompany.usermanagementserver.lastchat.LastChatManagement;
 import com.mycompany.usermanagementserver.serversocket.EventChatLauncher;
+import com.mycompany.usermanagementserver.serversocket.userconnectionmanagement.UserConnectionGabarger;
 import com.mycompany.usermanagementserver.session.SessionGabarger;
 import com.mycompany.usermanagementserver.unreadmessage.UnreadMessageManagement;
 import org.springframework.boot.CommandLineRunner;
@@ -39,5 +40,6 @@ public class UserManagementApplication implements CommandLineRunner{
     
     private void gabarge() {
         SessionGabarger.start();
+        UserConnectionGabarger.start();
     }
 }

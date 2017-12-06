@@ -21,6 +21,10 @@ public class UserConnectionsManagement {
     
     private static final ConcurrentHashMap<String, HashMap<UUID, UserConnection>> CONTAINER = new ConcurrentHashMap<>();
     
+    public static Map<String, HashMap<UUID, UserConnection>> getAll() {
+        return CONTAINER;
+    }
+    
     public static void addConnection(UserConnection userConnection) {
         if (validConnection(userConnection)) {
             HashMap<UUID, UserConnection> allConnections = CONTAINER.get(userConnection.getUserId());
