@@ -5,18 +5,12 @@
  */
 package com.mycompany.usermanagementserver.server.common;
 
-import com.mycompany.usermanagementserver.cachemanagement.RedisUtil;
-import com.mycompany.usermanagementserver.config.Config;
-import com.mycompany.usermanagementserver.exception.RedisException;
 import com.mycompany.usermanagementserver.exception.TokenException;
 import com.mycompany.usermanagementserver.session.Session;
 import com.mycompany.usermanagementserver.session.SessionManagement;
+import com.mycompany.webchatutil.config.CommonConfig;
 import com.mycompany.webchatutil.constant.Constant;
-import com.mycompany.webchatutil.constant.ResponseCode;
-import com.mycompany.webchatutil.utils.DateFormat;
 import com.mycompany.webchatutil.utils.StringUtils;
-import java.io.File;
-import java.util.Date;
 import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -59,7 +53,7 @@ public class Helper {
         return session;
     }
     
-    private static final Long SESSION_TIMEOUT = Config.SESSION_TIMEOUT * Constant.A_MINUTE;
+    private static final Long SESSION_TIMEOUT = CommonConfig.getSESSION_TIMEOUT() * Constant.A_MINUTE;
     public static boolean checkSession(Session session) throws TokenException{
         Boolean result = false;
         if (session == null || session.getToken() == null || session.getTimeAlive() == null) {

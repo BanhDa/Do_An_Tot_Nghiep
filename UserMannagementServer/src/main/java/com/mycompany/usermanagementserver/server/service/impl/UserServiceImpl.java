@@ -11,10 +11,13 @@ import com.mycompany.usermanagementserver.server.service.base.UserService;
 import com.mycompany.webchatutil.constant.ResponseCode;
 import com.mycompany.usermanagementserver.exception.UserManagememtException;
 import com.mycompany.usermanagementserver.server.common.ListUtils;
+import com.mycompany.usermanagementserver.server.response.ResponseMessage;
 import com.mycompany.webchatutil.utils.StringUtils;
 import com.mycompany.webchatutil.utils.Validator;
 import java.util.ArrayList;
 import java.util.List;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,6 +28,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class UserServiceImpl implements UserService{
 
+    private static final Logger logger = LoggerFactory.getLogger(UserServiceImpl.class);
     @Autowired
     private UserRepository userRepository;
     
@@ -59,15 +63,18 @@ public class UserServiceImpl implements UserService{
         if (user == null) {
             throw new UserManagememtException(ResponseCode.NOT_EXIST_USER, "NOT_EXIST_USER");
         }
-        user.setPassword(null);
         return user;
     }
     
     @Override
     public User updateUserInfo(User user) throws UserManagememtException{
-        User searchUser = userRepository.findByEmail(user.getEmail());
+        if (userRepository.checkExistEmail(user.getUserId(), user.getEmail())) {
+            throw new UserManagememtException(ResponseCode.EXISTED_EMAIL, ResponseMessage.EXISTED_EMAIL);
+        }
+        
+        User searchUser = userRepository.findByUserId(user.getUserId());
         if (searchUser == null) {
-            throw new UserManagememtException(ResponseCode.EMAIL_NOT_FOUND, "EMAIL_NOT_FOUND");
+            throw new UserManagememtException(ResponseCode.NOT_EXIST_USER, ResponseMessage.NOT_EXIST_USER);
         }
         searchUser = createUpdateUser(user, searchUser);
         userRepository.save(searchUser);

@@ -5,12 +5,14 @@
  */
 package com.mycompany.usermanagementserver.server.service.impl;
 
-import com.mycompany.usermanagementserver.config.Config;
 import com.mycompany.usermanagementserver.server.service.base.SessionService;
 import com.mycompany.usermanagementserver.session.Session;
 import com.mycompany.usermanagementserver.session.SessionManagement;
+import com.mycompany.webchatutil.config.CommonConfig;
 import com.mycompany.webchatutil.constant.Constant;
 import com.mycompany.webchatutil.utils.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 /**
@@ -20,7 +22,8 @@ import org.springframework.stereotype.Service;
 @Service
 public class SessionServiceImpl implements SessionService{
     
-    private static final Long SESSION_TIMEOUT = Config.SESSION_TIMEOUT * Constant.A_MINUTE;
+    private static final Long SESSION_TIMEOUT = CommonConfig.getSESSION_TIMEOUT() * Constant.A_MINUTE;
+    private static final Logger logger = LoggerFactory.getLogger(SessionServiceImpl.class);
     
     @Override
     public void addSession(Session session) {

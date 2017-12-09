@@ -27,6 +27,7 @@ public class LastChatResponse {
     private String messageType;
     private String value;
     private Integer unreadNumber;
+    private String avatarSrc;
 
     public String getUserName() {
         return userName;
@@ -122,6 +123,14 @@ public class LastChatResponse {
 
     public void setUnreadNumber(Integer unreadNumber) {
         this.unreadNumber = unreadNumber;
+    }
+
+    public String getAvatarSrc() {
+        return avatarSrc;
+    }
+
+    public void setAvatarSrc(String avatarSrc) {
+        this.avatarSrc = avatarSrc;
     }
 
     @Override

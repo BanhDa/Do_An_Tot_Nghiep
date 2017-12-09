@@ -5,7 +5,6 @@
  */
 package com.mycompany.usermanagementserver.serversocket.worker;
 
-import com.mycompany.usermanagementserver.entity.Socket;
 import com.mycompany.usermanagementserver.entity.message.Message;
 import com.mycompany.usermanagementserver.lastchat.LastChatManagement;
 import com.mycompany.usermanagementserver.serversocket.log.LogContainer;
@@ -13,10 +12,7 @@ import com.mycompany.usermanagementserver.serversocket.log.LogLastChatExecutor;
 import com.mycompany.usermanagementserver.serversocket.log.LogMessageChatExecutor;
 import com.mycompany.usermanagementserver.serversocket.log.LogUnreadMessageExecutor;
 import com.mycompany.usermanagementserver.serversocket.userconnectionmanagement.UserConnection;
-import com.mycompany.usermanagementserver.serversocket.userconnectionmanagement.UserConnectionsManagement;
 import com.mycompany.usermanagementserver.unreadmessage.UnreadMessageManagement;
-import java.util.Collection;
-import java.util.UUID;
 
 /**
  *

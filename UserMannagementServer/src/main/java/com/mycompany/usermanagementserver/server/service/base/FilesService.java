@@ -7,6 +7,7 @@ package com.mycompany.usermanagementserver.server.service.base;
 
 import com.mycompany.usermanagementserver.exception.UserManagememtException;
 import com.mycompany.usermanagementserver.server.domain.Image;
+import com.mycompany.usermanagementserver.server.domain.UserFile;
 
 /**
  *
@@ -22,9 +23,21 @@ public interface FilesService {
     
     public void writeFile(String path, byte[] data);
     
+    public void writeImageFile(String fileName, byte[] data);
+    
     public Image getImageByImageId(String imageId) throws UserManagememtException;
     
     public byte[] readFile(String urlFile) throws UserManagememtException;
     
+    public byte[] readImage(String fileName) throws UserManagememtException;
+    
     public String getAvatar(String userId);
+    
+    public String getFileExtension(String orginalFileName);
+    
+    public UserFile saveFile(UserFile file) throws UserManagememtException;
+    
+    public UserFile getFileByFileId(String fileId) throws UserManagememtException;
+    
+    public String getAvatarResourceByAvatarId(String avatarId);
 }

@@ -7,10 +7,9 @@ package com.mycompany.usermanagementserver.server.repository.impl;
 
 import com.mongodb.MongoClient;
 import com.mycompany.usermanagementserver.exception.UserManagememtException;
-import com.mycompany.usermanagementserver.server.domain.Image;
-import com.mycompany.usermanagementserver.server.repository.ImageRepository;
+import com.mycompany.usermanagementserver.server.domain.UserFile;
+import com.mycompany.usermanagementserver.server.repository.FileRepository;
 import com.mycompany.usermanagementserver.server.response.ResponseMessage;
-import com.mycompany.webchatutil.constant.Constant;
 import com.mycompany.webchatutil.constant.ResponseCode;
 import com.mycompany.webchatutil.constant.mongodbkey.StaticFileDBKey;
 import com.mycompany.webchatutil.utils.StringUtils;
@@ -31,22 +30,22 @@ import org.springframework.stereotype.Repository;
  * @author tuantran
  */
 @Repository
-public class ImageRepositoryImpl implements ImageRepository{
+public class FileRepositoryImpl implements FileRepository{
     
-    private static final Logger logger = LoggerFactory.getLogger(ImageRepositoryImpl.class);
+    private static final Logger logger = LoggerFactory.getLogger(FileRepositoryImpl.class);
     private MongoOperations mongoOperations;
     
     @Autowired
-    public ImageRepositoryImpl(MongoClient mongoClient) {
+    public FileRepositoryImpl(MongoClient mongoClient) {
         MongoDbFactory factory = new SimpleMongoDbFactory(mongoClient, StaticFileDBKey.DB_NAME);
         mongoOperations = new MongoTemplate(factory);
     }
     
     @Override
-    public Image save(Image image) throws UserManagememtException {
+    public UserFile save(UserFile file) throws UserManagememtException {
         try {
-            mongoOperations.save(image);
-            return image;
+            mongoOperations.save(file);
+            return file;
         } catch (Exception e) {
             e.printStackTrace();
             throw new UserManagememtException(ResponseCode.SAVE_FILE_ERROR, ResponseMessage.SAVE_FILE_ERROR);
@@ -54,26 +53,12 @@ public class ImageRepositoryImpl implements ImageRepository{
     }
     
     @Override
-    public Image findByImageId(String imageId) throws UserManagememtException{
-        if (StringUtils.isValid(imageId)) {
-            ObjectId id = new ObjectId(imageId);
+    public UserFile findByFileId(String fileId) throws UserManagememtException{
+        if (StringUtils.isValid(fileId)) {
+            ObjectId id = new ObjectId(fileId);
             Query query = new Query(Criteria.where(StaticFileDBKey.IMAGE.ID).is(id));
-            return mongoOperations.findOne(query, Image.class);
+            return mongoOperations.findOne(query, UserFile.class);
         }
         throw new UserManagememtException(ResponseCode.FILE_NOT_FOUND, ResponseMessage.FILE_NOT_FOUND);
     }
-
-    @Override
-    public Image findAvatar(String userId) {
-        Image image = null;
-        
-        if (StringUtils.isValid(userId)) {
-            Query query = new Query(Criteria.where(StaticFileDBKey.IMAGE.USER_ID).is(userId));
-            query.addCriteria(Criteria.where(StaticFileDBKey.IMAGE.IS_AVATAR).is(Constant.FLAG.ON));
-            image = mongoOperations.findOne(query, Image.class);
-        }
-        
-        return image;
-    }
-
 }

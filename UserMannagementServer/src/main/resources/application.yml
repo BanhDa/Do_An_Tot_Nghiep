@@ -13,4 +13,5 @@ mongodb:
 
 folder:
     image: E:\\doan\\image\\
+    file: E:\\doan\\file\\
         

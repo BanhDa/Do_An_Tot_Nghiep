@@ -14,4 +14,5 @@ public class MessageType {
     public static final String TEXT = "TEXT";
     public static final String READ = "READ";
     public static final String IMAGE = "IMAGE";
+    public static final String FILE = "FILE";
 }

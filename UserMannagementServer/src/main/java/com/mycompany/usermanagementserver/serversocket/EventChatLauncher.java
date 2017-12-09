@@ -21,6 +21,7 @@ import com.mycompany.usermanagementserver.serversocket.worker.EventChatExecutor;
 import com.mycompany.usermanagementserver.serversocket.worker.EventReadExecutor;
 import com.mycompany.usermanagementserver.serversocket.worker.Executor;
 import com.mycompany.usermanagementserver.token.JWTUtil;
+import com.mycompany.webchatutil.config.CommonConfig;
 import com.mycompany.webchatutil.utils.ModelMapperUtils;
 import com.mycompany.webchatutil.utils.StringUtils;
 
@@ -33,8 +34,8 @@ public class EventChatLauncher {
     public static void start() throws InterruptedException { 
  
         Configuration config = new Configuration(); 
-        config.setHostname("localhost"); 
-        config.setPort(9092); 
+        config.setHostname(CommonConfig.getSOCKET_SERVER_HOST()); 
+        config.setPort(CommonConfig.getSOCKET_SERVER_PORT()); 
  
         final SocketIOServer server = new SocketIOServer(config); 
         
@@ -66,8 +67,11 @@ public class EventChatLauncher {
                 
                 Executor executor = null;
                 if (message.getMessageType().equals(MessageType.TEXT)
-                        || message.getMessageType().equals(MessageType.IMAGE)) {
+                        || message.getMessageType().equals(MessageType.IMAGE)
+                        || message.getMessageType().equals(MessageType.FILE)) {
+                    
                     executor = new EventChatExecutor(userConnection, message);
+                    
                 } else if (message.getMessageType().equals(MessageType.READ)) {
                     executor = new EventReadExecutor(userConnection, message);
                 }

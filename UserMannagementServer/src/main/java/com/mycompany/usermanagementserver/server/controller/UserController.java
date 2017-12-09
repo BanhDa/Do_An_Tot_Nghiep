@@ -5,6 +5,8 @@
  */
 package com.mycompany.usermanagementserver.server.controller;
 
+import com.mycompany.usermanagementserver.UserManagementApplication;
+import com.mycompany.usermanagementserver.entity.UserFull;
 import com.mycompany.usermanagementserver.server.domain.User;
 import com.mycompany.usermanagementserver.server.request.RegisterRequest;
 import com.mycompany.usermanagementserver.server.response.Response;
@@ -14,9 +16,15 @@ import com.mycompany.webchatutil.constant.ResponseCode;
 import com.mycompany.usermanagementserver.exception.UserManagememtException;
 import com.mycompany.usermanagementserver.server.request.Request;
 import com.mycompany.usermanagementserver.server.request.SearchRequest;
+import com.mycompany.usermanagementserver.server.service.base.FilesService;
 import com.mycompany.usermanagementserver.server.service.base.SessionService;
 import com.mycompany.usermanagementserver.session.Session;
+import com.mycompany.webchatutil.utils.ModelMapperUtils;
+import com.mycompany.webchatutil.utils.StringUtils;
+import java.util.ArrayList;
 import java.util.List;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -38,12 +46,15 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/user")
 public class UserController {
 
+    private static final Logger logger = LoggerFactory.getLogger(UserController.class);
     @Autowired
     private UserService userService;
     @Autowired
     private TokenService tokenService;
     @Autowired
     private SessionService sessionService;
+    @Autowired
+    private FilesService filesService;
 
     @RequestMapping("/login")
     public ResponseEntity<Response> login(@RequestBody @Validated RegisterRequest request) {
@@ -114,7 +125,14 @@ public class UserController {
                 throw new UserManagememtException(ResponseCode.INVALID_TOKEN, "INVALID_TOKEN");
             }
             
-            User userInfo = userService.getUserInfo(friendId);
+            User userInfo;
+            String userId = tokenService.getUserId(token);
+            if (StringUtils.isValid(friendId) && !friendId.equals(userId)) {
+                userInfo = userService.getUserInfo(friendId);
+                userInfo.setPassword(null);
+            } else {
+                userInfo = userService.getUserInfo(userId);
+            }
             
             response.setCode(ResponseCode.SUCCESSFUL);
             response.setData(userInfo);
@@ -164,7 +182,8 @@ public class UserController {
         try {
             if (sessionService.checkToken(token)) {
                 String userId = tokenService.getUserId(token);
-                List<User> data = userService.searchUser(userId, requestData.getSearchUserName(), requestData.getSkip(), requestData.getTake());
+                List<User> users = userService.searchUser(userId, requestData.getSearchUserName(), requestData.getSkip(), requestData.getTake());
+                List<UserFull> data = addAvatarResource(users);
                 response.setCode(ResponseCode.SUCCESSFUL);
                 response.setData(data);
             } else {
@@ -180,6 +199,23 @@ public class UserController {
         }
         
         return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+    
+    private List<UserFull> addAvatarResource(List<User> users) {
+        List<UserFull> userFulls = new ArrayList<>();
+        
+        if (users != null && !users.isEmpty()) {
+            for (User user : users) {
+                UserFull userFull = ModelMapperUtils.toObject(user, UserFull.class);
+                if (StringUtils.isValid( user.getAvatar() )) {
+                    String avatarSrc = filesService.getAvatarResourceByAvatarId(user.getAvatar());
+                    userFull.setAvatarSrc(avatarSrc);
+                }
+                userFulls.add(userFull);
+            }
+        }
+        
+        return userFulls;
     }
     
     @PostMapping("/logout")

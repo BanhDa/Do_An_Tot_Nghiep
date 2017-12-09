@@ -18,4 +18,6 @@ public class ResponseMessage {
     public static final String SAVE_FILE_ERROR = "Save file error!";
     public static final String WRITE_FILE_ERROR = "Write file error!";
     public static final String IMAGE_ID_WRONG = "Image id is wrong!";
+    public static final String EXISTED_EMAIL = "Existed email!";
+    public static final String NOT_EXIST_USER = "Not exits user!";
 }

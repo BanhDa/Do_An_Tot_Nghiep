@@ -21,4 +21,13 @@ public class StaticFileDBKey {
         public static final String UPLOAD_TIME = "upload_time";
         public static final String IS_AVATAR = "is_avatar";
     }
+    
+    public static final String FILE_COLELCTION_NAME = "file";
+    public static class FILE {
+        public static final String ID = "_id";
+        public static final String USER_ID = "user_id";
+        public static final String PATH = "path";
+        public static final String UPLOAD_TIME = "upload_time";
+        public static final String ORIGINAL_FILE_NAME = "original_file_name";
+    }
 }

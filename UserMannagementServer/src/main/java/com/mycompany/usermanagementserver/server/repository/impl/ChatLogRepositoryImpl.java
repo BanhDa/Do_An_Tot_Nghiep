@@ -22,6 +22,8 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import org.bson.types.ObjectId;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.MongoDbFactory;
 import org.springframework.data.mongodb.core.MongoOperations;
@@ -36,6 +38,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class ChatLogRepositoryImpl implements ChatLogRepository{
     
+    private static final Logger logger = LoggerFactory.getLogger(ChatLogRepositoryImpl.class);
     private MongoOperations mongoOperations;
     
     @Autowired

@@ -16,6 +16,8 @@ import com.mycompany.webchatutil.utils.Validator;
 import java.util.ArrayList;
 import java.util.List;
 import org.bson.types.ObjectId;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.MongoDbFactory;
 import org.springframework.data.mongodb.core.MongoOperations;
@@ -32,6 +34,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class UserRepositoryImpl implements UserRepository{
     
+    private static final Logger logger = LoggerFactory.getLogger(UserRepositoryImpl.class);
     private MongoOperations mongoOperations;
     
     @Autowired
@@ -56,6 +59,22 @@ public class UserRepositoryImpl implements UserRepository{
             ex.printStackTrace();
         }
         return searchUser;
+    }
+    
+    @Override
+    public boolean checkExistEmail(String userId, String email) {
+        Query query = new Query(Criteria.where(UserDBKey.USER.EMAIL).is(email));
+        ObjectId id = new ObjectId(userId);
+        query.addCriteria(Criteria.where(UserDBKey.USER.ID).ne(id));
+        
+        try {
+            User searchUser = mongoOperations.findOne(query, User.class);
+            return searchUser != null;
+        } catch (Exception ex) {
+            System.out.println("search error!");
+            ex.printStackTrace();
+        }
+        return true;
     }
     
     @Override

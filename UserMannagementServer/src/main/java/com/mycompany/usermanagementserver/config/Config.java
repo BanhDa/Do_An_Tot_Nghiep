@@ -37,6 +37,8 @@ public class Config {
     public Integer mongoPort;
     @Value("${folder.image}")
     public String folderImage;
+    @Value("${folder.file}")
+    public String folderFile;
 
     @Bean
     public MongoClient mongoClient() throws UnknownHostException {
@@ -52,7 +54,6 @@ public class Config {
 //    public MongoTemplate mongoTemplate() throws Exception{
 //        return new MongoTemplate(mongoDBFactory());
 //    }
-    public static Long SESSION_TIMEOUT = 60L;
 
     @Bean
     public FilterRegistrationBean corsFilter() {

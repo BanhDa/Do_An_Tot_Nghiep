@@ -5,6 +5,7 @@
  */
 package com.mycompany.usermanagementserver.server.repository;
 
+import com.mycompany.usermanagementserver.exception.UserManagememtException;
 import com.mycompany.usermanagementserver.server.domain.User;
 import java.util.List;
 
@@ -15,6 +16,8 @@ import java.util.List;
 public interface UserRepository{
     
     public User findByEmail(String email);
+    
+    public boolean checkExistEmail(String userId, String email);
     
     public void save(User user);
     

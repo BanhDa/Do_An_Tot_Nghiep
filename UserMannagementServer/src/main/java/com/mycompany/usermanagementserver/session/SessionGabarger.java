@@ -5,7 +5,7 @@
  */
 package com.mycompany.usermanagementserver.session;
 
-import com.mycompany.usermanagementserver.config.Config;
+import com.mycompany.webchatutil.config.CommonConfig;
 import com.mycompany.webchatutil.constant.Constant;
 import java.util.Map;
 
@@ -15,7 +15,7 @@ import java.util.Map;
  */
 public class SessionGabarger implements Runnable{
 
-    private static final Long EXPIRED_TIME = Config.SESSION_TIMEOUT * Constant.A_MINUTE;
+    private static final Long EXPIRED_TIME = CommonConfig.getSESSION_TIMEOUT() * Constant.A_MINUTE;
     
     private SessionGabarger() {}
     

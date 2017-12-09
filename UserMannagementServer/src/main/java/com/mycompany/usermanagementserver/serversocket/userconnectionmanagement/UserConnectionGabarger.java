@@ -5,6 +5,7 @@
  */
 package com.mycompany.usermanagementserver.serversocket.userconnectionmanagement;
 
+import com.mycompany.webchatutil.config.CommonConfig;
 import com.mycompany.webchatutil.constant.Constant;
 import java.util.HashMap;
 import java.util.Map;
@@ -16,7 +17,7 @@ import java.util.UUID;
  */
 public class UserConnectionGabarger{
 
-    private static final Long CONNECTION_TIMEOUT = Constant.A_MINUTE;
+    private static final Long CONNECTION_TIMEOUT = CommonConfig.getCONNECTION_TIMEOUT() * Constant.A_MINUTE;
     
     public static void start() {
         GabargeCollector gabargeCollector = new GabargeCollector();
