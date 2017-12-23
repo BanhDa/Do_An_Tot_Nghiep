@@ -9,7 +9,7 @@ package com.mycompany.usermanagementserver.entity;
  *
  * @author tuantran
  */
-public class UserFull {
+public class UserFull implements Comparable<UserFull>{
     
     private String userId;
     private String userName;
@@ -19,6 +19,13 @@ public class UserFull {
     private Integer gender;
     private String avatar;
     private String avatarSrc;
+
+    public UserFull() {
+    }
+
+    public UserFull(String userId) {
+        this.userId = userId;
+    }
 
     public String getUserId() {
         return userId;
@@ -82,6 +89,11 @@ public class UserFull {
 
     public void setAvatarSrc(String avatarSrc) {
         this.avatarSrc = avatarSrc;
+    }
+
+    @Override
+    public int compareTo(UserFull o) {
+        return this.userId.compareTo(o.getUserId());
     }
     
 }

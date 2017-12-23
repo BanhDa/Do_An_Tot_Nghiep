@@ -25,13 +25,17 @@ import com.mycompany.webchatutil.constant.ResponseCode;
 import com.mycompany.webchatutil.utils.ModelMapperUtils;
 import com.mycompany.webchatutil.utils.StringUtils;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.comparator.ComparableComparator;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -68,48 +72,29 @@ public class ChatController {
 
             String userId = tokenService.getUserId(token);
             List<Message> lastMessages = chatService.getLastMessages(userId);
-
+            
             List<String> friendIds = chatService.getLastChatUsers(userId);
             List<User> friendsInfo = userService.getUsersInfo(friendIds);
-            List<UserFull> userFulls = addAvatarResource(friendsInfo);
+            HashMap<String, UserFull> userFulls = addAvatarResource(friendsInfo);
             
             List<LastChatResponse> lastChatResponses = new ArrayList<>();
             if (userFulls != null && !userFulls.isEmpty()
                     && lastMessages != null && !lastMessages.isEmpty()) {
 
                 int lastMessageSize = lastMessages.size();
-                int friendInfoSize = userFulls.size();
                 int countLastMessage = 0;
-                int countFriendInfo = 0;
-                while (countLastMessage < lastMessageSize && countFriendInfo < friendInfoSize) {
+                while (countLastMessage < lastMessageSize) {
                     Message message = lastMessages.get(countLastMessage);
-                    UserFull friendInfo = userFulls.get(countFriendInfo);
                     String friendId = message.getFromUserId().equals(userId) ? message.getToUserId() : message.getFromUserId();
-                    if (friendInfo.getUserId().equals(friendId)) {
+                    if (userFulls.containsKey(friendId)) {
                         LastChatResponse lastChatResponse = ModelMapperUtils.toObject(message, LastChatResponse.class);
+                        UserFull friendInfo = userFulls.get(friendId);
                         addUserInfo(lastChatResponse, friendInfo);
                         lastChatResponses.add(lastChatResponse);
-                        countFriendInfo++;
-                        countLastMessage++;
-                    } else if (friendInfo.getUserId().compareTo(friendId) > 0) {
-                        countFriendInfo++;
-                    } else {
-                        countLastMessage++;
                     }
+                    countLastMessage++;
                 }
 
-                if (countFriendInfo < friendInfoSize) {
-                    for (int i = countFriendInfo; i < friendInfoSize; i++) {
-                        LastChatResponse lastChatResponse = ModelMapperUtils.toObject(friendsInfo.get(i), LastChatResponse.class);
-                        lastChatResponses.add(lastChatResponse);
-                    }
-                } else if (countLastMessage < lastMessageSize) {
-                    for (int i = countLastMessage; i < lastMessageSize; i++) {
-                        LastChatResponse lastChatResponse = ModelMapperUtils.toObject(lastMessages.get(i), LastChatResponse.class);
-
-                        lastChatResponses.add(lastChatResponse);
-                    }
-                }
             }
             updateUnreadAndTimeSendMessage(userId, lastChatResponses);
             response.setCode(ResponseCode.SUCCESSFUL);
@@ -141,8 +126,8 @@ public class ChatController {
         }
     }
 
-    private List<UserFull> addAvatarResource(List<User> users) {
-        List<UserFull> userFulls = new ArrayList<>();
+    private HashMap<String, UserFull> addAvatarResource(List<User> users) {
+        HashMap<String, UserFull> userFulls = new HashMap<>();
         
         if (users != null && !users.isEmpty()) {
             for (User user : users) {
@@ -151,7 +136,7 @@ public class ChatController {
                     String avatarSrc = filesService.getAvatarResourceByAvatarId(user.getAvatar());
                     userFull.setAvatarSrc(avatarSrc);
                 }
-                userFulls.add(userFull);
+                userFulls.put(userFull.getUserId(), userFull);
             }
         }
         

@@ -56,7 +56,7 @@ public class EventChatLauncher {
         }));
 
         server.addEventListener(Socket.EVENT_CHAT, MessageRequest.class, (SocketIOClient socketIOClient, MessageRequest data, AckRequest ackRequest) -> {
-
+        
             if (data != null && Helper.checkToken(data.getToken())) {
                 String userId = JWTUtil.getUserId( data.getToken() );
                 UserConnection userConnection = new UserConnection(userId, socketIOClient);
@@ -64,14 +64,14 @@ public class EventChatLauncher {
                     UserConnectionsManagement.addConnection(userConnection);
                 }
                 Message message = ModelMapperUtils.toObject(data, Message.class);
-                
+        
                 Executor executor = null;
                 if (message.getMessageType().equals(MessageType.TEXT)
                         || message.getMessageType().equals(MessageType.IMAGE)
                         || message.getMessageType().equals(MessageType.FILE)) {
-                    
+        
                     executor = new EventChatExecutor(userConnection, message);
-                    
+        
                 } else if (message.getMessageType().equals(MessageType.READ)) {
                     executor = new EventReadExecutor(userConnection, message);
                 }
